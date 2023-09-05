@@ -1,6 +1,25 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
 :root {
     --orange: #ff9523;
     --pink: #e45086;
     --white: #faeff4;
 }
 
+html, body {
+    background-color: var(--orange);
+    height: 100%;
+}
+
+body #center-logo {
+    max-width: 400px;
+    fill: var(--pink);
+}
+
+body form button {
+    background-color: var(--pink) !important;
+    border-color: var(--pink) !important;
+}
