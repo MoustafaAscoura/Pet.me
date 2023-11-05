@@ -12,7 +12,7 @@ class Pet(models.Model):
         ('Female', 'Female'),
     )
 
-    name = models.CharField(_('Name'), max_length=100)
+    name = models.CharField('Name' , max_length=100)
     brief = models.TextField()
     gender = models.CharField(max_length=10, choices=GENDER_CHOICES)
     pet_type = models.CharField(max_length=10, choices=TYPE_CHOICES)
