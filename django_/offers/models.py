@@ -4,7 +4,7 @@ from pets.models import Pet
 
 # Create your models here.
 class Offer(models.Model):
-    user=models.ForeignKey(User, on_delete=models.CASCADE, related_name="requests")
+    user=models.ForeignKey(User, on_delete=models.CASCADE, related_name="offers")
     pet=models.ForeignKey(Pet, on_delete=models.CASCADE, related_name="offers")
     created_at = models.DateTimeField(auto_now_add=True)
     available = models.BooleanField(default=True)
