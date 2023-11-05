@@ -85,9 +85,12 @@ DJOSER = {
     # Disable tokens
     'TOKEN_MODEL': None,
     'TOKEN_CREATE': None,
+    'SERIALIZERS': {
+        'user': 'users.serializers.CustomUserSerializer',
+    },
 }
 
-AUTH_USER_MODEL = 'accounts.CustomUser'
+AUTH_USER_MODEL = 'accounts.User'
 
 
 

@@ -16,7 +16,20 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include 
+
 # from django.urls.conf import include, re_path
+
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('accounts/', include('accounts.urls') ),
+    path('pets/', include('pets.urls') ),
+    # path('offers/', include('offers.urls') ),
+    # path('posts/', include('social.urls') ),
+    # path('messages/', include('messages.urls') ),
+    path('/api/auth/', include('djoser.urls') ),
+    # path('auth/', include('djoser.urls.jwt') ),
+]
 
 
 
@@ -39,19 +52,5 @@ from django.urls import path, include
 #     permission_classes=(permissions.AllowAny,),
 # )
 
-
-
-
-
-urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('accounts/', include('accounts.urls') ),
-    # path('pets/', include('pets.urls') ),
-    # path('offers/', include('offers.urls') ),
-    # path('posts/', include('social.urls') ),
-    # path('messages/', include('messages.urls') ),
-    path('auth/', include('djoser.urls') ),
-    # path('auth/', include('djoser.urls.jwt') ),
-]
 
 
