@@ -1,5 +1,6 @@
 from django.urls import path, include
+from .views import *
 
 urlpatterns = [
-    path('auth/', include('djoser.urls')),
+    path('<int:id>/adoptions', UserAdoptionsView.as_view({'get': 'list'}), name='user.history'),
 ]

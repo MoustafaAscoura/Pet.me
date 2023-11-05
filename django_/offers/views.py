@@ -4,6 +4,7 @@ from rest_framework import status
 from django.utils import timezone
 from rest_framework import viewsets
 from .models import Offer,AdoptRequest
+from pets.models import Adoption
 from .serializers import OfferSerializer,AdoptRequestsSerializer
 
 # Create your views here.
@@ -26,10 +27,13 @@ class AdoptRequestsView(viewsets.ModelViewSet):
         adopt_offer = adopt_request.offer
         pet = adopt_offer.pet
         owner = pet.owner
+        adoption = pet.adoptions.last()
 
-        #end ownership of old owner
-        owner.adoption.end_date = timezone.now()
+        #end ownership of old owner and create new adoption for new owner
+        adoption.end_date = timezone.now()
         pet.owner = adopt_request.user
-        adopt_offer.status = "Adopted"
+        adopt_offer.available = False
         adopt_request.delete()
+        new_adoption = Adoption(user=adopt_request.user, pet=pet)
+        new_adoption.save()
         return Response('Accepted Adopt Request', status=status.HTTP_204_NO_CONTENT)

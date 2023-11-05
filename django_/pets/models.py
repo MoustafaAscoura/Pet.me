@@ -12,12 +12,12 @@ class Pet(models.Model):
     )
 
     name = models.CharField('Name' , max_length=100)
-    brief = models.TextField()
-    gender = models.CharField(max_length=6, choices=GENDER_CHOICES)
-    pet_type = models.CharField(max_length=10, choices=TYPE_CHOICES)
-    species = models.CharField(max_length=50)
-    color = models.CharField(max_length=20)
-    birthdate = models.DateTimeField()
+    brief = models.TextField(null=True)
+    gender = models.CharField(max_length=6, choices=GENDER_CHOICES, null=True)
+    pet_type = models.CharField(max_length=10, choices=TYPE_CHOICES, null=True)
+    species = models.CharField(max_length=50, null=True)
+    color = models.CharField(max_length=20, null=True)
+    birthdate = models.DateTimeField(null=True)
     owner = models.ForeignKey('accounts.User', on_delete=models.CASCADE, related_name='pets')
 
     def __str__(self):
@@ -25,7 +25,7 @@ class Pet(models.Model):
     
 class Photo(models.Model):
     photo = models.ImageField(upload_to="pets/images/%Y/%m/%d/%H/%M/%S/", null=True, blank=True)
-    project = models.ForeignKey(Pet,on_delete=models.CASCADE, related_name='photos')
+    pet = models.ForeignKey(Pet,on_delete=models.CASCADE, related_name='photos')
 
 class Adoption(models.Model):
     user = models.ForeignKey('accounts.User', on_delete=models.CASCADE, related_name='adoptions')

@@ -8,8 +8,6 @@ class PetSerializer(serializers.Serializer):
         fields = '__all__'
 
 
-
-
 class AdoptionSerializer(serializers.Serializer):
     class Meta:
         model = Adoption

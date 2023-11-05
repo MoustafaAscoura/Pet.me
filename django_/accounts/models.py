@@ -3,7 +3,7 @@ from django.db import models
 
 class User(AbstractUser):
     GENDER_CHOICES = (('Male', 'Male'),('Female', 'Female'),)
-    gender = models.CharField(max_length=6, choices=GENDER_CHOICES, default='Male')
+    gender = models.CharField(max_length=6, choices=GENDER_CHOICES, null=True)
     phone = models.CharField(max_length=11,blank=True)
     picture = models.ImageField(upload_to="account/images/%Y/%m/%d/%H/%M/%S/", null=True, default="/media/accounts/images/annon.png")
     created_at = models.DateTimeField(auto_now_add=True)
