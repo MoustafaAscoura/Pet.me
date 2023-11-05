@@ -4,7 +4,7 @@ function ExploreCard() {
     return (
 <div className="col-6 col-md-4 col-lg-3">        
 <div className="card mb-2 border-1 vh-50 p-2 " style={{ backgroundColor: "#D9C9BA" }}>
-<FontAwesomeIcon onClick={""} className={`position-absolute fs-3 `} style={{ right: '10px', top: '15px', width:"15px",height:"15px",backgroundColor: "#D9C9BA", color:"" ,borderRadius:"100px", padding:"3px"}} icon={faHeart}beat />
+<FontAwesomeIcon onClick={"#"} className={`position-absolute fs-3 `} style={{ right: '10px', top: '15px', width:"15px",height:"15px",backgroundColor: "#D9C9BA", color:"" ,borderRadius:"100px", padding:"3px"}} icon={faHeart}beat />
   
    <img  
    src={"logo512.png" }
