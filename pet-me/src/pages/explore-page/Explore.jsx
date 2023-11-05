@@ -1,7 +1,16 @@
+import ExploreCard from "../../components/ExploreCard";
+
 const Explore = () => {
     return ( 
-        <div>
-            <h1>Explore Page</h1>
+        <div className="row">
+         <ExploreCard/>
+         <ExploreCard/>
+         <ExploreCard/>
+         <ExploreCard/>
+         <ExploreCard/>
+         <ExploreCard/>
+
+
         </div>
      );
 }
