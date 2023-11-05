@@ -11,6 +11,10 @@ class OffersView(viewsets.ModelViewSet):
     queryset = Offer.objects.all()
     serializer_class = OfferSerializer
 
+    def perform_create(self, serializer):
+        pass
+        
+
 class AdoptRequestsView(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = AdoptRequest.objects.filter(offer__id=self.kwargs['id'])
