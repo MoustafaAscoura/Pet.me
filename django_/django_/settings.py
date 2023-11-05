@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'offers.apps.OffersConfig',
     'social.apps.SocialConfig',
     'messages.apps.MessagesConfig',
+    'djoser',
 ]
 
 MIDDLEWARE = [

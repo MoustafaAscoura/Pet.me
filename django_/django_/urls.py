@@ -24,4 +24,6 @@ urlpatterns = [
     path('offers/', include('offers.urls') ),
     path('posts/', include('social.urls') ),
     path('messages/', include('messages.urls') ),
+    path('auth/', include('djoser.urls') ),
+    path('auth/', include('djoser.urls.jwt') ),
 ]
