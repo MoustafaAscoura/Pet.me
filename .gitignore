@@ -25,6 +25,5 @@ yarn-error.log*
 
 .venv/
 __pycache__/
-media/
-migrations/
+
 

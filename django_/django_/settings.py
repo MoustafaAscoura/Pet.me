@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'pets.apps.PetsConfig',
     'offers.apps.OffersConfig',
+    'social.apps.SocialConfig',
+    'messages.apps.MessagesConfig',
 ]
 
 MIDDLEWARE = [
