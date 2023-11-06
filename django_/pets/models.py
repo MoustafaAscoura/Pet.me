@@ -17,7 +17,7 @@ class Pet(models.Model):
     pet_type = models.CharField(max_length=10, choices=TYPE_CHOICES, null=True)
     species = models.CharField(max_length=50, null=True)
     color = models.CharField(max_length=20, null=True)
-    birthdate = models.DateTimeField(null=True)
+    birthdate = models.DateField(null=True)
     owner = models.ForeignKey('accounts.User', on_delete=models.CASCADE, related_name='pets')
 
     def __str__(self):
@@ -30,8 +30,8 @@ class Photo(models.Model):
 class Adoption(models.Model):
     user = models.ForeignKey('accounts.User', on_delete=models.CASCADE, related_name='adoptions')
     pet = models.ForeignKey(Pet, on_delete=models.CASCADE)
-    start_at = models.DateTimeField(auto_now_add=True)
-    end_at = models.DateTimeField(null=True)
+    start_at = models.DateField(auto_now_add=True)
+    end_at = models.DateField(null=True)
 
     def __str__(self):
         return f"{self.user} adopted {self.pet}"

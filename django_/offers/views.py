@@ -30,7 +30,7 @@ class AdoptRequestsView(viewsets.ModelViewSet):
         adoption = pet.adoptions.last()
 
         #end ownership of old owner and create new adoption for new owner
-        adoption.end_date = timezone.now()
+        adoption.end_date = timezone.now().date()
         pet.owner = adopt_request.user
         adopt_offer.available = False
         adopt_request.delete()

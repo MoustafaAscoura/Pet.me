@@ -13,6 +13,7 @@ class PetsView(viewsets.ModelViewSet):
         pet = serializer.save(owner=self.request.user)
         adoption = Adoption(user=self.request.user, pet=pet)
         adoption.save()
+        #Create Photo
 
 class PetAdoptionsView(viewsets.ModelViewSet):
     def get_queryset(self):
@@ -21,7 +22,6 @@ class PetAdoptionsView(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         latest_adoption = self.queryset.last()
-        latest_adoption.end_at = timezone.now()
-
+        latest_adoption.end_at = timezone.now().date()
         serializer.save(owner=self.request.user)
 
