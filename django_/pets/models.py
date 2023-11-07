@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 class Pet(models.Model):
     TYPE_CHOICES = (
@@ -23,13 +24,28 @@ class Pet(models.Model):
     def __str__(self):
         return self.name
     
+    def get_thumbnail(self):
+        try:
+            return self.photos.all().first().photo
+        except:
+            return None
+
+
+    def get_age(self):
+        if self.birthdate:
+            age =  timezone.now().date() - self.birthdate
+            y = age.days // 365.25
+            m = (age.days % 365.25) // 12
+            d = age.days % 30
+            return {'years':y,'months':m, 'days':d}
+    
 class Photo(models.Model):
     photo = models.ImageField(upload_to="pets/images/%Y/%m/%d/%H/%M/%S/", null=True, blank=True)
     pet = models.ForeignKey(Pet,on_delete=models.CASCADE, related_name='photos')
 
 class Adoption(models.Model):
     user = models.ForeignKey('accounts.User', on_delete=models.CASCADE, related_name='adoptions')
-    pet = models.ForeignKey(Pet, on_delete=models.CASCADE)
+    pet = models.ForeignKey(Pet, on_delete=models.CASCADE, related_name='adoptions')
     start_at = models.DateField(auto_now_add=True)
     end_at = models.DateField(null=True)
 

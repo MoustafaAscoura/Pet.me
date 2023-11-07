@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'offers.apps.OffersConfig',
     'social.apps.SocialConfig',
     'chats.apps.ChatsConfig',
+    'django_cleanup.apps.CleanupConfig',
 ]
 
 MIDDLEWARE = [
