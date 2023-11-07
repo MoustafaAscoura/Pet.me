@@ -1,8 +1,12 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
-from rest_framework import viewsets
 from .models import Pet, Adoption, Photo
+from offers.models import Offer
 from .serializers import PetSerializer, AdoptionSerializer
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework import viewsets
+
 # Create your views here.
 
 class PetsView(viewsets.ModelViewSet):
@@ -23,13 +27,17 @@ class PetsView(viewsets.ModelViewSet):
             else:
                 Photo.objects.create(pet=pet,photo="/media/pets/images/dog_annon.png")
 
-    
     def perform_update(self,serializer):
         pet = serializer.save(owner=self.request.user)
         files = self.request.FILES.getlist('photos')
         if files:
             for old_photo in pet.photos: old_photo.delete()
             for f in files: Photo.objects.create(pet=pet,photo=f)
+
+    def offerPet(self, request, pk):
+        offer = Offer.objects.create(user=request.user, pet=get_object_or_404(Pet,pk=self.kwargs['pk']))
+        return Response('Pet is offered for adoption', status=status.HTTP_201_CREATED)
+
 
 class PetAdoptionsView(viewsets.ModelViewSet):
     def get_queryset(self):
