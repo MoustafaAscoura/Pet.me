@@ -40,8 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'accounts.apps.AccountsConfig',
     'djoser',
+    'accounts.apps.AccountsConfig',
     'drf_yasg',
     "corsheaders",
     'rest_framework_simplejwt',
@@ -92,39 +92,37 @@ WSGI_APPLICATION = 'djoserauthapi.wsgi.application'
 
 # JWT Settings
 SIMPLE_JWT = {
-    'AUTH_HEADER_TYPES': ('JWT',),
-    # "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
-    # "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
-    # "ROTATE_REFRESH_TOKENS": True,
-    # "UPDATE_LAST_LOGIN": True,
+    "AUTH_HEADER_TYPES": ("JWT",),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
 }
 
-
-# DJOSER = {
-#     'LOGIN_FIELD': 'email',
-#     'USER_CREATE_PASSWORD_RETYPE':True,
-#     'ACTIVATION_URL':'/activate/{uid}/{token}',
-#     'SEND_ACTIVATION_EMAIL':True,
-#     'SEND_CONFIRMATION_EMAIL':True,
-#     'PASSWORD_CHANGED_EMAIL_CONFIRMATION':True,
-#     'PASSWORD_RESET_CONFIRM_URL': 'password-reset/{uid}/{token}',
-#     'SET_PASSWORD_RETYPE': True,
-#     'PASSWORD_RESET_SHOW_EMAIL_NOT_FOUND': True,
-#     'TOKEN_MODEL': None,       # To Delete User Must Set it to None
-#     'SERIALIZERS':{
-#         'user_create': 'account.serializers.UserCreateSerializer',
-#         'user': 'account.serializers.UserCreateSerializer',
-#         'user_delete': 'djoser.serializers.UserDeleteSerializer',
-#     },
-#     'EMAIL': {
-#         'activation': 'account.email.ActivationEmail',
-#         'confirmation': 'account.email.ConfirmationEmail',
-#         'password_reset': 'account.email.PasswordResetEmail',
-#         'password_changed_confirmation': 'account.email.PasswordChangedConfirmationEmail',
-#     },
-
-
-# }
+# Djoser Settings
+DJOSER = {
+    'LOGIN_FIELD': 'email',
+    'USER_CREATE_PASSWORD_RETYPE':True,
+    'ACTIVATION_URL':'/activate/{uid}/{token}',
+    'SEND_ACTIVATION_EMAIL':True,
+    'SEND_CONFIRMATION_EMAIL':True,
+    'PASSWORD_CHANGED_EMAIL_CONFIRMATION':True,
+    'PASSWORD_RESET_CONFIRM_URL': 'password-reset/{uid}/{token}',
+    'SET_PASSWORD_RETYPE': True,
+    'PASSWORD_RESET_SHOW_EMAIL_NOT_FOUND': True,
+    "ACTIVATION_URL": "activate/{uid}/{token}",
+    "SEND_ACTIVATION_EMAIL": True,
+    "SOCIAL_AUTH_TOKEN_STRATEGY": "djoser.social.token.jwt.TokenStrategy",
+    "SOCIAL_AUTH_ALLOWED_REDIRECT_URIS": [
+        "your redirect url",
+        "your redirect url",
+    ],
+    "SERIALIZERS": {
+        "user_create": "accounts.serializers.UserCreateSerializer",  # custom serializer
+        "user": "djoser.serializers.UserSerializer",
+        "current_user": "djoser.serializers.UserSerializer",
+        "user_delete": "djoser.serializers.UserSerializer",
+    },
+}
 
 
 
@@ -132,12 +130,12 @@ AUTH_USER_MODEL = 'accounts.User'
 
 
 # Email Configuration
-# EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_PORT = 587
-# EMAIL_HOST_USER = os.environ.get('EMAIL_USER')
-# EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASS')
-# EMAIL_USE_TLS = True
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "localhost"
+EMAIL_PORT = "1025"
+EMAIL_HOST_USER = ""
+EMAIL_HOST_PASSWORD = ""
+EMAIL_USE_TLS = False
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -186,23 +184,23 @@ WSGI_APPLICATION = 'django_.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-    "ENGINE": "django.db.backends.postgresql",
-    "NAME": "pet_me",
-    "USER": "mariam",
-    "PASSWORD": "123456789@m",
-    "HOST": "localhost",
-    "PORT": "5432",
-    }
-}
-
 # DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
+#     "default": {
+#     "ENGINE": "django.db.backends.postgresql",
+#     "NAME": "pet_me",
+#     "USER": "mariam",
+#     "PASSWORD": "123456789@m",
+#     "HOST": "localhost",
+#     "PORT": "5432",
 #     }
 # }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
