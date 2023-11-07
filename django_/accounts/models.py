@@ -18,8 +18,8 @@ class UserManager(BaseUserManager):
     def create_superuser(self, username, email, password=None, **extra_fields):
         user = self.create_user(username, email, password=password, **extra_fields)
         user.is_active = True
-        # user.is_staff = True
-        user.is_admin = True
+        user.is_staff = True
+        # user.is_admin = True
         user.save(using=self._db)
         return user
 
@@ -31,11 +31,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     GENDER_CHOICES = (('Male', 'Male'),('Female', 'Female'),)
     email = models.EmailField(max_length=225, unique=True, verbose_name='Email')
     username = models.CharField(max_length=255)
+    text_test = models.CharField(max_length=255)
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     is_active = models.BooleanField(default=True)
-    # is_staff = models.BooleanField(default=False)
-    is_admin = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=False)
+    # is_admin = models.BooleanField(default=False)
     gender = models.CharField(max_length=6, choices=GENDER_CHOICES, null=True)
     phone = models.CharField(max_length=11,blank=True)
     picture = models.ImageField(upload_to="accounts/images/%Y/%m/%d/%H/%M/%S/", null=True, default="/media/accounts/images/annon.png")

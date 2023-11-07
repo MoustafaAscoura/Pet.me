@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'djoser',
-    'accounts.apps.AccountsConfig',
     'drf_yasg',
     "corsheaders",
     'rest_framework_simplejwt',
@@ -51,6 +50,7 @@ INSTALLED_APPS = [
     'social.apps.SocialConfig',
     'chats.apps.ChatsConfig',
     'django_cleanup.apps.CleanupConfig',
+    'accounts.apps.AccountsConfig',
 ]
 
 MIDDLEWARE = [
@@ -89,40 +89,48 @@ ROOT_URLCONF = 'djoserauthapi.urls'
 
 WSGI_APPLICATION = 'djoserauthapi.wsgi.application'
 
+# ACCOUNT_EMAIL_VERIFICATION = 'none'
+
+# ACCOUNT_AUTHENTICATION_METHOD = 'username'
+
+# ACCOUNT_EMAIL_REQUIRED = False
+
 
 # JWT Settings
 SIMPLE_JWT = {
     "AUTH_HEADER_TYPES": ("JWT",),
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "ROTATE_REFRESH_TOKENS": True,
+    "UPDATE_LAST_LOGIN": True,
     "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
 }
 
 # Djoser Settings
-DJOSER = {
-    'LOGIN_FIELD': 'email',
-    'USER_CREATE_PASSWORD_RETYPE':True,
-    'ACTIVATION_URL':'/activate/{uid}/{token}',
-    'SEND_ACTIVATION_EMAIL':True,
-    'SEND_CONFIRMATION_EMAIL':True,
-    'PASSWORD_CHANGED_EMAIL_CONFIRMATION':True,
-    'PASSWORD_RESET_CONFIRM_URL': 'password-reset/{uid}/{token}',
-    'SET_PASSWORD_RETYPE': True,
-    'PASSWORD_RESET_SHOW_EMAIL_NOT_FOUND': True,
-    "ACTIVATION_URL": "activate/{uid}/{token}",
-    "SEND_ACTIVATION_EMAIL": True,
-    "SOCIAL_AUTH_TOKEN_STRATEGY": "djoser.social.token.jwt.TokenStrategy",
-    "SOCIAL_AUTH_ALLOWED_REDIRECT_URIS": [
-        "your redirect url",
-        "your redirect url",
-    ],
-    "SERIALIZERS": {
-        "user_create": "accounts.serializers.UserCreateSerializer",  # custom serializer
-        "user": "djoser.serializers.UserSerializer",
-        "current_user": "djoser.serializers.UserSerializer",
-        "user_delete": "djoser.serializers.UserSerializer",
-    },
-}
+# DJOSER = {
+#     'LOGIN_FIELD': 'email',
+#     'USER_CREATE_PASSWORD_RETYPE':True,
+#     'ACTIVATION_URL':'/activate/{uid}/{token}',
+#     'SEND_ACTIVATION_EMAIL':True,
+#     'SEND_CONFIRMATION_EMAIL':True,
+#     'PASSWORD_CHANGED_EMAIL_CONFIRMATION':True,
+#     'PASSWORD_RESET_CONFIRM_URL': 'password-reset/{uid}/{token}',
+#     'SET_PASSWORD_RETYPE': True,
+#     'PASSWORD_RESET_SHOW_EMAIL_NOT_FOUND': True,
+#     "ACTIVATION_URL": "activate/{uid}/{token}",
+#     "SEND_ACTIVATION_EMAIL": True,
+#     "SOCIAL_AUTH_TOKEN_STRATEGY": "djoser.social.token.jwt.TokenStrategy",
+#     # "SOCIAL_AUTH_ALLOWED_REDIRECT_URIS": [
+#     #     "your redirect url",
+#     #     "your redirect url",
+#     # ],
+#     "SERIALIZERS": {
+#         "user_create": "accounts.serializers.UserCreateSerializer",  # custom serializer
+#         "user": "djoser.serializers.UserSerializer",
+#         "current_user": "djoser.serializers.UserSerializer",
+#         "user_delete": "djoser.serializers.UserSerializer",
+#     },
+# }
 
 
 
@@ -132,7 +140,9 @@ AUTH_USER_MODEL = 'accounts.User'
 # Email Configuration
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "localhost"
-EMAIL_PORT = "1025"
+EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = "1025"
+# EMAIL_PORT = "587"
 EMAIL_HOST_USER = ""
 EMAIL_HOST_PASSWORD = ""
 EMAIL_USE_TLS = False
