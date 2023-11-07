@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -64,9 +65,9 @@ MIDDLEWARE = [
 
 REST_FRAMEWORK = {
     # "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"],
-    # "DEFAULT_AUTHENTICATION_CLASSES": (
-    #     "rest_framework_simplejwt.authentication.JWTAuthentication",
-    # ),
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ),
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',
@@ -76,73 +77,78 @@ REST_FRAMEWORK = {
 
 # ------------------------------------
 
-DJOSER = {
-    # Disable tokens
-    'TOKEN_MODEL': None,
-    'TOKEN_CREATE': None,
-    'SERIALIZERS': {
-        'user': 'accounts.serializers.UserSerializer',
-    },
+ROOT_URLCONF = 'djoserauthapi.urls'
+
+WSGI_APPLICATION = 'djoserauthapi.wsgi.application'
+
+
+# JWT Settings
+SIMPLE_JWT = {
+    'AUTH_HEADER_TYPES': ('JWT',),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "ROTATE_REFRESH_TOKENS": True,
+    "UPDATE_LAST_LOGIN": True,
 }
+
+
+DJOSER = {
+    'LOGIN_FIELD': 'email',
+    'USER_CREATE_PASSWORD_RETYPE':True,
+    'ACTIVATION_URL':'/activate/{uid}/{token}',
+    'SEND_ACTIVATION_EMAIL':True,
+    'SEND_CONFIRMATION_EMAIL':True,
+    'PASSWORD_CHANGED_EMAIL_CONFIRMATION':True,
+    'PASSWORD_RESET_CONFIRM_URL': 'password-reset/{uid}/{token}',
+    'SET_PASSWORD_RETYPE': True,
+    'PASSWORD_RESET_SHOW_EMAIL_NOT_FOUND': True,
+    'TOKEN_MODEL': None,       # To Delete User Must Set it to None
+    'SERIALIZERS':{
+        'user_create': 'account.serializers.UserCreateSerializer',
+        'user': 'account.serializers.UserCreateSerializer',
+        'user_delete': 'djoser.serializers.UserDeleteSerializer',
+    },
+    'EMAIL': {
+        'activation': 'account.email.ActivationEmail',
+        'confirmation': 'account.email.ConfirmationEmail',
+        'password_reset': 'account.email.PasswordResetEmail',
+        'password_changed_confirmation': 'account.email.PasswordChangedConfirmationEmail',
+    },
+
+
+}
+
+
 
 AUTH_USER_MODEL = 'accounts.User'
 
 
+# Email Configuration
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = os.environ.get('EMAIL_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASS')
+EMAIL_USE_TLS = True
 
-# DJOSER = {
-#     'PASSWORD_RESET_CONFIRM_URL': '#/password/reset/confirm/{uid}/{token}',
-#     'USERNAME_RESET_CONFIRM_URL': '#/username/reset/confirm/{uid}/{token}',
-#     'ACTIVATION_URL': '#/activate/{uid}/{token}',
-#     'SEND_ACTIVATION_EMAIL': True,
-#     'SERIALIZERS': {},
-# }
+# Password validation
+# https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
-# EMAIL CONFIG
-# EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-# EMAIL_HOST = "localhost"
-# EMAIL_PORT = "1025"
-# EMAIL_HOST_USER = ""
-# EMAIL_HOST_PASSWORD = ""
-# EMAIL_USE_TLS = False
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
+]
 
-
-# SIMPLE_JWT = {
-#     "AUTH_HEADER_TYPES": ("JWT",),
-#     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
-#     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
-#     "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
-# }
-
-
-# # DJOSER CONFIG
-# DJOSER = {
-#     "LOGIN_FIELD": "email",
-#     "USER_CREATE_PASSWORD_RETYPE": True,
-#     "USERNAME_CHANGED_EMAIL_CONFIRMATION": True,
-#     "PASSWORD_CHANGED_EMAIL_CONFIRMATION": True,
-#     "SEND_CONFIRMATION_EMAIL": True,
-#     "SET_USERNAME_RETYPE": True,
-#     "SET_PASSWORD_RETYPE": True,
-#     "USERNAME_RESET_CONFIRM_URL": "password/reset/confirm/{uid}/{token}",
-#     "PASSWORD_RESET_CONFIRM_URL": "email/reset/confirm/{uid}/{token}",
-#     "ACTIVATION_URL": "activate/{uid}/{token}",
-#     "SEND_ACTIVATION_EMAIL": True,
-#     "SOCIAL_AUTH_TOKEN_STRATEGY": "djoser.social.token.jwt.TokenStrategy",
-#     "SOCIAL_AUTH_ALLOWED_REDIRECT_URIS": [
-#         "your redirect url",
-#         "your redirect url",
-#     ],
-#     "SERIALIZERS": {
-#         "user_create": "accounts.serializers.UserCreateSerializer",  # custom serializer
-#         "user": "djoser.serializers.UserSerializer",
-#         "current_user": "djoser.serializers.UserSerializer",
-#         "user_delete": "djoser.serializers.UserSerializer",
-#     },
-# }
-
-# # CORS HEADERS
-# CORS_ORIGIN_ALLOW_ALL = True
-# CORS_ALLOW_CREDENTIALS = True
 
 # -------------------------------------
 
