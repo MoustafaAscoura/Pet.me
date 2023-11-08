@@ -27,3 +27,64 @@
 #         return HttpResponse(jdata, content_type='application/json')
         
 #     return Response(serializer.errors, status=400) 
+
+# --------------------------------------------------------------------------
+
+from rest_framework import generics
+from .models import Post, Comment, Reply, Message, Report
+from .serializers import PostsSerializer, CommentSerializer, ReplySerializer, MessageSerializer, ReportsSerializer
+
+
+class PostListCreateAPIView(generics.ListCreateAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostsSerializer
+
+
+class PostRetreiveUpdateDeleteAPIView(generics.RetreiveUpdateDeleteAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostsSerializer
+
+
+# ---- report ----
+
+
+class ReportListCreateAPIView(generics.CreateAPIView):
+    queryset = Report.objects.all()
+    serializer_class = ReportsSerializer
+
+
+# -- comment --
+
+
+class CommentListCreateAPIView(generics.ListCreateAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+
+
+class CommentRetreiveUpdateDeleteAPIView(generics.RetreiveUpdateDeleteAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+
+
+# report a comment
+class ReportCommentCreateShowAPIView(generics.CreateAPIView):
+    queryset = Report.objects.all()
+    serializer_class = ReportsSerializer
+
+
+# ----reply----
+class ReplyListCreateAPIView(generics.ListCreateAPIView):
+    queryset = Report.objects.all()
+    serializer_class = ReportsSerializer
+    
+
+
+# ---- message ---
+class MessageListCreateAPIView(generics.ListCreateAPIView):
+    queryset = Message.objects.all()
+    serializer_class = MessageSerializer
+
+
+class MessagetRetreiveUpdateDeleteAPIView(generics.RetreiveUpdateDeleteAPIView):
+    queryset = Message.objects.all()
+    serializer_class = MessageSerializer
