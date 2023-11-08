@@ -22,13 +22,11 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('accounts.urls') ),
+    path('accounts/', include('accounts.urls') ),
     path('pets/', include('pets.urls') ),
     path('offers/', include('offers.urls') ),
     # path('posts/', include('social.urls') ),
     # path('chats/', include('chats.urls') ),
-    # path('/api/auth/', include('djoser.urls') ),
-    # path('auth/', include('djoser.urls.jwt') ),
 ]
 
 

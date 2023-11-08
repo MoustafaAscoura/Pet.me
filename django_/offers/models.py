@@ -6,6 +6,7 @@ from pets.models import Pet
 class Offer(models.Model):
     user=models.ForeignKey(User, on_delete=models.CASCADE, related_name="offers")
     pet=models.ForeignKey(Pet, on_delete=models.CASCADE, related_name="offers")
+    message=models.TextField(default="")
     created_at = models.DateField(auto_now_add=True)
     available = models.BooleanField(default=True)
 

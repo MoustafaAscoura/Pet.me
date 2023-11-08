@@ -35,7 +35,9 @@ class PetsView(viewsets.ModelViewSet):
             for f in files: Photo.objects.create(pet=pet,photo=f)
 
     def offerPet(self, request, pk):
-        offer = Offer.objects.create(user=request.user, pet=get_object_or_404(Pet,pk=self.kwargs['pk']))
+        offer = Offer.objects.create(
+            user=request.user, pet=get_object_or_404(Pet,pk=self.kwargs['pk'], 
+                                                     message=request.data.get(['message'])))
         return Response('Pet is offered for adoption', status=status.HTTP_201_CREATED)
 
 

@@ -1,7 +1,5 @@
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.contrib.auth.models import AbstractUser, BaseUserManager, PermissionsMixin
 from django.db import models
-
-
 
 
 # User MANAGER Model
@@ -25,18 +23,10 @@ class UserManager(BaseUserManager):
 
 
 #  NORMAL User Model : 
-
-class User(AbstractBaseUser, PermissionsMixin):
-# class User(BaseUserManager):
+class User(AbstractUser, PermissionsMixin):
     GENDER_CHOICES = (('Male', 'Male'),('Female', 'Female'),)
-    email = models.EmailField(max_length=225, unique=True, verbose_name='Email')
-    username = models.CharField(max_length=255)
-    text_test = models.CharField(max_length=255)
-    first_name = models.CharField(max_length=255)
-    last_name = models.CharField(max_length=255)
-    is_active = models.BooleanField(default=True)
-    is_staff = models.BooleanField(default=False)
-    # is_admin = models.BooleanField(default=False)
+    email = models.EmailField(unique=True)
+
     gender = models.CharField(max_length=6, choices=GENDER_CHOICES, null=True)
     phone = models.CharField(max_length=11,blank=True)
     picture = models.ImageField(upload_to="accounts/images/%Y/%m/%d/%H/%M/%S/", null=True, default="/media/accounts/images/annon.png")
@@ -44,13 +34,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     birthdate = models.DateField(null=True,blank=True)
     profile_url = models.URLField(null=True,blank=True)
 
-
-    objects = UserManager()
-
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["username", "first_name", "last_name"]
+    REQUIRED_FIELDS = ["username", "password"]
 
-
+    # objects = UserManager()
     def get_profile_picture(self):
         if self.picture:
             return self.picture.url
@@ -64,15 +51,3 @@ class User(AbstractBaseUser, PermissionsMixin):
         if self.first_name:
             return self.first_name + " " + self.last_name
         return self.username
-
-
-    def get_short_name(self):
-        return self.username
-
-    def has_perm(self, perm, obj=None):
-        return True
-
-    def has_module_perms(self, app_label):
-        return True
-
-
