@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     "corsheaders",
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
+    'social_django',
     'django_cleanup.apps.CleanupConfig',
     'pets.apps.PetsConfig',
     'offers.apps.OffersConfig',
@@ -45,10 +46,14 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
 REST_FRAMEWORK = {
-    "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"],
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
+        #"rest_framework.permissions.AllowAny"
+        ],
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
@@ -58,14 +63,10 @@ REST_FRAMEWORK = {
         ],
 }
 
-
-# ------------------------------------
-
-# For Later
-# CORS_ALLOWED_ORIGINS = [
-#     "http://localhost:3000",
-#     "http://127.0.0.1:3000",
-# ]
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]
 
 
 ROOT_URLCONF = 'djoserauthapi.urls'
@@ -74,12 +75,12 @@ WSGI_APPLICATION = 'djoserauthapi.wsgi.application'
 
 # JWT Settings
 SIMPLE_JWT = {
-    "AUTH_HEADER_TYPES": ("JWT",),
+    'AUTH_HEADER_TYPES': ('Bearer', 'JWT',),
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
     "ROTATE_REFRESH_TOKENS": True,
     "UPDATE_LAST_LOGIN": True,
-    # "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
+    "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
 }
 
 # Djoser Settings
@@ -89,13 +90,13 @@ DJOSER = {
     'SEND_ACTIVATION_EMAIL':True,
     "ACTIVATION_URL": "accounts/auth/users/activate/{uid}/{token}",
     'PASSWORD_RESET_SHOW_EMAIL_NOT_FOUND': True,
-    'TOKEN_MODEL':None, 
-    
-#     "SOCIAL_AUTH_TOKEN_STRATEGY": "djoser.social.token.jwt.TokenStrategy",
-#     # "SOCIAL_AUTH_ALLOWED_REDIRECT_URIS": [
-#     #     "your redirect url",
-#     #     "your redirect url",
-#     # ],
+    'TOKEN_MODEL':None,    
+    "SOCIAL_AUTH_ALLOWED_REDIRECT_URIS": [
+        'http://127.0.0.1:8000/accounts/auth/social/complete/github/',
+        'http://127.0.0.1:8000/accounts/auth/social/complete/facebook/',
+        'http://127.0.0.1:8000/accounts/auth/social/complete/google-oauth2/',
+    ],
+
     "SERIALIZERS": {
         "user": "accounts.serializers.UserSerializer",
         'current_user': 'accounts.serializers.UserSerializer',
@@ -114,28 +115,6 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = "petme.api@gmail.com"
 EMAIL_HOST_PASSWORD = "yyiycndhqjwhlmpq"
 
-# Password validation
-# https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
-
-AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
-]
-
-
-# -------------------------------------
-
-
 
 ROOT_URLCONF = 'django_.urls'
 
@@ -150,16 +129,15 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
+
             ],
         },
     },
 ]
 
 WSGI_APPLICATION = 'django_.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 # DATABASES = {
 #     "default": {
@@ -179,46 +157,46 @@ DATABASES = {
     }
 }
 
-# Password validation
-# https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',},
 ]
 
 
-# Internationalization
-# https://docs.djangoproject.com/en/4.2/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.2/howto/static-files/
-
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 # Default primary key field type
-# https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.github.GithubOAuth2', # github <----
+    'social_core.backends.facebook.FacebookOAuth2', # facebook <----
+    'social_core.backends.google.GoogleOAuth2',  # google <----
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+SOCIAL_AUTH_GITHUB_KEY = '923e62395399fae6dd91'
+SOCIAL_AUTH_GITHUB_SECRET = '2102d52907f9c08fe90fd30bd3c091aa5a27efbd'
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '534268798718-451t7sn6c7iuu8ts9jqvbhjtalg2vqa4.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
+
+SOCIAL_AUTH_FACEBOOK_KEY = "3738217359745570"
+SOCIAL_AUTH_FACEBOOK_SECRET = "7fdf8462e923299f9b618e46656fd6b9"
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
+'https://www.googleapis.com/auth/userinfo.email',
+]

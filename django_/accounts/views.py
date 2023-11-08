@@ -1,11 +1,14 @@
-# from django.shortcuts import render
+import requests
+
 from rest_framework import viewsets,status
-# from rest_framework.views import APIView
+from rest_framework.views import APIView
 from rest_framework.response import Response
+from djoser.views import UserViewSet
+from django.urls import reverse
+
+
 from pets.models import Adoption
 from pets.serializers import AdoptionSerializer
-# import requests
-from djoser.views import UserViewSet
 
 
 class UserAdoptionsView(viewsets.ModelViewSet):
@@ -13,19 +16,35 @@ class UserAdoptionsView(viewsets.ModelViewSet):
         queryset = Adoption.objects.filter(user__id=self.kwargs['id'])
     serializer_class = AdoptionSerializer
 
-# class UserActivationView(APIView):
-#     def get (self, request, uid, token):
-#         print('hello')
-#         protocol = 'https://' if request.is_secure() else 'http://'
-#         web_url = protocol + request.get_host()
-#         post_url = web_url + "/auth/users/activate/"
-#         post_data = {'uid': uid, 'token': token}
-#         result = requests.post(post_url, data = post_data)
-#         content = result.text
-#         return Response(content)
+class SocialAuthView(APIView):
+    permission_classes = []
+    def get (self, request, provider):      
+        protocol = 'https://' if request.is_secure() else 'http://'
+        web_url = protocol + request.get_host()
+        post_url = web_url + f"/accounts/auth/o/{provider}/"
+        redirect_uri = web_url + reverse('social-auth-complete',kwargs={'provider':provider})
+        print(redirect_uri)
+        result = requests.get(post_url, params={'redirect_uri': redirect_uri})
+        return Response(result.json())
+
+class SocialAuthCompleteView(APIView):
+    permission_classes = []
+
+    def get(self, request, provider):
+        code, state = str(request.GET['code']), str(request.GET['state'])
+        json_obj = {'code': code, 'state': state}
+
+        protocol = 'https://' if request.is_secure() else 'http://'
+        web_url = protocol + request.get_host()
+        post_url = web_url + f"/accounts/auth/o/{provider}/"
 
 
- 
+        headers = {'Content-type': 'application/x-www-form-urlencoded'}
+        result = requests.post(post_url, data = json_obj,headers=headers)
+        return Response(result.json())
+
+
+#Activate user email
 class ActivateUser(UserViewSet):
     def get_serializer(self, *args, **kwargs):
         serializer_class = self.get_serializer_class()
