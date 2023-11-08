@@ -14,12 +14,25 @@ class Comment(models.Model):
     content = models.TextField()
     created_at = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        # return f'{self.user.username} - {self.post.title}' 
+        return f'{self.user.username}' 
+
 
 class Reply(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="comments")
     comment = models.ForeignKey(Comment, on_delete=models.CASCADE, related_name="comments")
     content = models.TextField()
     created_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f'{self.user.username}' 
 
 
 # for chats between owner & adopter
@@ -28,6 +41,10 @@ class Message(models.Model):
     receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name="received_messages")
     content = models.TextField()
     created_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.user.username}' 
+
 
 
 
