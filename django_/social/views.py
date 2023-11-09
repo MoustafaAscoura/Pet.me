@@ -39,8 +39,7 @@ class PostListCreateAPIView(generics.ListCreateAPIView):
     queryset = Post.objects.all()
     serializer_class = PostsSerializer
 
-
-class PostRetreiveUpdateDeleteAPIView(generics.RetreiveUpdateDeleteAPIView):
+class PostRetreiveUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Post.objects.all()
     serializer_class = PostsSerializer
 
@@ -48,7 +47,7 @@ class PostRetreiveUpdateDeleteAPIView(generics.RetreiveUpdateDeleteAPIView):
 # ---- report ----
 
 
-class ReportListCreateAPIView(generics.CreateAPIView):
+class ReportPostCreateShowAPIView(generics.CreateAPIView):
     queryset = Report.objects.all()
     serializer_class = ReportsSerializer
 
@@ -61,7 +60,7 @@ class CommentListCreateAPIView(generics.ListCreateAPIView):
     serializer_class = CommentSerializer
 
 
-class CommentRetreiveUpdateDeleteAPIView(generics.RetreiveUpdateDeleteAPIView):
+class CommentRetrieveUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
 
@@ -75,7 +74,7 @@ class ReportCommentCreateShowAPIView(generics.CreateAPIView):
 # ----reply----
 class ReplyListCreateAPIView(generics.ListCreateAPIView):
     queryset = Report.objects.all()
-    serializer_class = ReportsSerializer
+    serializer_class = ReplySerializer
     
 
 
@@ -85,6 +84,6 @@ class MessageListCreateAPIView(generics.ListCreateAPIView):
     serializer_class = MessageSerializer
 
 
-class MessagetRetreiveUpdateDeleteAPIView(generics.RetreiveUpdateDeleteAPIView):
+class MessagetRetreiveUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Message.objects.all()
     serializer_class = MessageSerializer

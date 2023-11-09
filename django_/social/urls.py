@@ -19,24 +19,24 @@
 from django.urls import path
 from .views import (
     PostListCreateAPIView,
-    PostRetrieveUpdateDeleteAPIView,
+    PostRetreiveUpdateDeleteAPIView,
     ReportPostCreateShowAPIView,
     CommentListCreateAPIView,
     CommentRetrieveUpdateDeleteAPIView,
     ReportCommentCreateShowAPIView,
     ReplyListCreateAPIView,
     MessageListCreateAPIView,
-    MessageRetrieveUpdateDeleteAPIView
+    MessagetRetreiveUpdateDeleteAPIView
 )
 
 urlpatterns = [
     path('posts/', PostListCreateAPIView.as_view(), name='post-list-create'),
-    path('posts/<int:pk>/', PostRetrieveUpdateDeleteAPIView.as_view(), name='post-retrieve-update-delete'),
+    path('posts/<int:pk>/', PostRetreiveUpdateDeleteAPIView.as_view(), name='post-retrieve-update-delete'),
     path('posts/<int:pk>/report/', ReportPostCreateShowAPIView.as_view(), name='post-report'),
     path('posts/<int:pk>/comment/', CommentListCreateAPIView.as_view(), name='comment-list-create'),
     path('posts/<int:pk>/comment/<int:comment_id>/', CommentRetrieveUpdateDeleteAPIView.as_view(), name='comment-retrieve-update-delete'),
     path('posts/<int:pk>/comment/<int:comment_id>/report/', ReportCommentCreateShowAPIView.as_view(), name='comment-report'),
     path('posts/<int:pk>/comment/<int:comment_id>/reply/', ReplyListCreateAPIView.as_view(), name='comment-reply'),
     path('messages/', MessageListCreateAPIView.as_view(), name='message-list-create'),
-    path('messages/<int:pk>/', MessageRetrieveUpdateDeleteAPIView.as_view(), name='message-retrieve-update-delete'),
+    path('messages/<int:pk>/', MessagetRetreiveUpdateDeleteAPIView.as_view(), name='message-retrieve-update-delete'),
 ]

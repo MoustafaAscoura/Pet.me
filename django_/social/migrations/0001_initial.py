@@ -2,7 +2,17 @@
 
 from django.db import migrations, models
 import django.db.models.deletion
+# -------------------------------------
 
+# from django.db.models import F
+
+# def set_default_user(apps, schema_editor):
+#     User = apps.User('accounts', 'User')  # Adjust the app and model name accordingly
+#     Post = apps.Post('social', 'Post')  # Replace with your actual app and model name
+#     Post.objects.update(user=F('user') or User.objects.first())
+
+
+# ------------------------------------------------
 
 class Migration(migrations.Migration):
 
