@@ -2,11 +2,14 @@ from rest_framework import serializers
 from .models import Post,Comment, Reply, Message, Report
 
 class PostsSerializer(serializers.ModelSerializer):
+    username = serializers.SerializerMethodField()
+
     class Meta:
         model = Post
-        fields = '__all__'
-        #set depth = 1 for image url and user details
+        fields = ['id', 'created_at', 'modified_at', 'content', 'user', 'username']
 
+    def get_username(self, obj):
+        return obj.user.username
 
 
 class CommentSerializer(serializers.ModelSerializer):
