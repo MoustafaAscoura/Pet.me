@@ -92,9 +92,9 @@ DJOSER = {
     'PASSWORD_RESET_SHOW_EMAIL_NOT_FOUND': True,
     'TOKEN_MODEL':None,    
     "SOCIAL_AUTH_ALLOWED_REDIRECT_URIS": [
-        'http://127.0.0.1:8000/accounts/auth/social/complete/github/',
-        'http://127.0.0.1:8000/accounts/auth/social/complete/facebook/',
-        'http://127.0.0.1:8000/accounts/auth/social/complete/google-oauth2/',
+        'http://localhost:8000/accounts/auth/social/complete/github/',
+        'http://localhost:8000/accounts/auth/social/complete/facebook/',
+        'http://localhost:8000/accounts/auth/social/complete/google-oauth2/',
     ],
 
     "SERIALIZERS": {
@@ -189,14 +189,17 @@ AUTHENTICATION_BACKENDS = (
 )
 
 SOCIAL_AUTH_GITHUB_KEY = '923e62395399fae6dd91'
-SOCIAL_AUTH_GITHUB_SECRET = '2102d52907f9c08fe90fd30bd3c091aa5a27efbd'
+SOCIAL_AUTH_GITHUB_SECRET = 'a9decba498cee01e861f989733b1d252857a95c0'
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '534268798718-451t7sn6c7iuu8ts9jqvbhjtalg2vqa4.apps.googleusercontent.com'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '824848817431-3395fioo7nn8pvq96fbpdgqcgj28ajmt.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
 
-SOCIAL_AUTH_FACEBOOK_KEY = "3738217359745570"
-SOCIAL_AUTH_FACEBOOK_SECRET = "7fdf8462e923299f9b618e46656fd6b9"
+SOCIAL_AUTH_FACEBOOK_KEY = "153943981107306"
+SOCIAL_AUTH_FACEBOOK_SECRET = "4b7b1ee8dd76f30370333a23fee61bfb"
+SOCIAL_AUTH_FACEBOOK_API_VERSION = '18.0'
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
-'https://www.googleapis.com/auth/userinfo.email',
-]
+# SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
+# 'https://www.googleapis.com/auth/userinfo.email',
+# ]
+
+# SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']

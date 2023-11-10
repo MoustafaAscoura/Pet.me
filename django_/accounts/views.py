@@ -16,17 +16,6 @@ class UserAdoptionsView(viewsets.ModelViewSet):
         queryset = Adoption.objects.filter(user__id=self.kwargs['id'])
     serializer_class = AdoptionSerializer
 
-class SocialAuthView(APIView):
-    permission_classes = []
-    def get (self, request, provider):      
-        protocol = 'https://' if request.is_secure() else 'http://'
-        web_url = protocol + request.get_host()
-        post_url = web_url + f"/accounts/auth/o/{provider}/"
-        redirect_uri = web_url + reverse('social-auth-complete',kwargs={'provider':provider})
-        print(redirect_uri)
-        result = requests.get(post_url, params={'redirect_uri': redirect_uri})
-        return Response(result.json())
-
 class SocialAuthCompleteView(APIView):
     permission_classes = []
 
@@ -34,6 +23,7 @@ class SocialAuthCompleteView(APIView):
         code, state = str(request.GET['code']), str(request.GET['state'])
         json_obj = {'code': code, 'state': state}
 
+        return Response(json_obj)
         protocol = 'https://' if request.is_secure() else 'http://'
         web_url = protocol + request.get_host()
         post_url = web_url + f"/accounts/auth/o/{provider}/"
