@@ -15,7 +15,8 @@ class AdoptionSerializer(serializers.ModelSerializer):
     def to_representation(self, obj):
         return {
             "username": obj.user.full_name,
-            "user_id": obj.user.id, 
+            "user_id": obj.user.id,
+            "user_picture": obj.user.get_profile_picture(),
             "petname": obj.pet.name,
             "pet_id": obj.pet.id,
             "start_at": obj.start_at,

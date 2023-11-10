@@ -10,7 +10,6 @@ class Post(models.Model):
     def __str__(self):
         return f'{self.user.username}' 
 
-
 class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="comments")
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments")
@@ -24,7 +23,6 @@ class Comment(models.Model):
         # return f'{self.user.username} - {self.post.title}' 
         return f'{self.user.username}' 
 
-
 class Reply(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="replies")
     comment = models.ForeignKey(Comment, on_delete=models.CASCADE, related_name="replies")
@@ -37,27 +35,12 @@ class Reply(models.Model):
     def __str__(self):
         return f'{self.user.username}' 
 
-
-# for chats between owner & adopter
-class Message(models.Model):
-    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name="sent_messages")
-    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name="received_messages")
-    content = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f'{self.user.username}' 
-
-
-
-
 class Photo(models.Model):
     photo = models.ImageField(upload_to="projects/images/%Y/%m/%d/%H/%M/%S/", null=True, blank=True)
     post = models.ForeignKey(Post,on_delete=models.CASCADE, related_name='photos')
 
     def __str__(self):
         return self.name
-
 
 class Report(models.Model):
     user=models.ForeignKey(User, on_delete=models.CASCADE, related_name="reports")

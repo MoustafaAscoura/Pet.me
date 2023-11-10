@@ -17,17 +17,7 @@
 # -----------------------------------------------------------
 
 from django.urls import path
-from .views import (
-    PostListCreateAPIView,
-    PostRetreiveUpdateDeleteAPIView,
-    ReportPostCreateShowAPIView,
-    CommentListCreateAPIView,
-    CommentRetrieveUpdateDeleteAPIView,
-    ReportCommentCreateShowAPIView,
-    ReplyListCreateAPIView,
-    MessageListCreateAPIView,
-    MessagetRetreiveUpdateDeleteAPIView
-)
+from .views import *
 
 urlpatterns = [
     path('posts/', PostListCreateAPIView.as_view(), name='post-list-create'),
@@ -37,6 +27,4 @@ urlpatterns = [
     path('posts/<int:pk>/comment/<int:comment_id>/', CommentRetrieveUpdateDeleteAPIView.as_view(), name='comment-retrieve-update-delete'),
     path('posts/<int:pk>/comment/<int:comment_id>/report/', ReportCommentCreateShowAPIView.as_view(), name='comment-report'),
     path('posts/<int:pk>/comment/<int:comment_id>/reply/', ReplyListCreateAPIView.as_view(), name='comment-reply'),
-    path('messages/', MessageListCreateAPIView.as_view(), name='message-list-create'),
-    path('messages/<int:pk>/', MessagetRetreiveUpdateDeleteAPIView.as_view(), name='message-retrieve-update-delete'),
 ]

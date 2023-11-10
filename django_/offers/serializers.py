@@ -1,8 +1,10 @@
 from rest_framework import serializers
 from .models import Offer,AdoptRequest
 from pets.serializers import PetSerializer
+from chats.serializers import MessageSerializer
 
 class AdoptRequestsSerializer(serializers.ModelSerializer):
+    message = MessageSerializer()
     def to_representation(self, obj):
         return {
             "request_id": obj.id,
@@ -12,15 +14,19 @@ class AdoptRequestsSerializer(serializers.ModelSerializer):
             "petname": obj.offer.pet.name,
             "pet_id": obj.offer.pet.id,
             "created_at": obj.created_at,
+            "message":obj.message.content,
         }
 
     class Meta:
         model = AdoptRequest
+        fields='__all__'
+        read_only_fields = ('id','created_at',  )
+
+
 
 class OfferSerializer(serializers.ModelSerializer):
     pet = PetSerializer(read_only=True)
-    requests = AdoptRequestsSerializer(many=True, read_only=True)
+
     class Meta:
         model = Offer
         fields = '__all__'
-        read_only_fields = ('available','created_at')

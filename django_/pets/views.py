@@ -27,27 +27,24 @@ class PetsView(viewsets.ModelViewSet):
             else:
                 Photo.objects.create(pet=pet,photo="/media/pets/images/dog_annon.png")
 
+
     def perform_update(self,serializer):
-        pet = serializer.save(owner=self.request.user)
+        pet = serializer.save()
         files = self.request.FILES.getlist('photos')
         if files:
-            for old_photo in pet.photos: old_photo.delete()
+            for old_photo in pet.photos.all(): old_photo.delete()
             for f in files: Photo.objects.create(pet=pet,photo=f)
 
     def offerPet(self, request, pk):
         offer = Offer.objects.create(
-            user=request.user, pet=get_object_or_404(Pet,pk=self.kwargs['pk'], 
-                                                     message=request.data.get(['message'])))
+            user=request.user, pet=get_object_or_404(Pet,pk=self.kwargs['pk']), 
+                                                     description=request.data.get('description'))
         return Response('Pet is offered for adoption', status=status.HTTP_201_CREATED)
 
 
 class PetAdoptionsView(viewsets.ModelViewSet):
     def get_queryset(self):
-        queryset = Adoption.objects.filter(pet__id=self.kwargs['id'])
+        return Adoption.objects.filter(pet__id=self.kwargs['pk'])
     serializer_class = AdoptionSerializer
 
-    def perform_create(self, serializer):
-        latest_adoption = self.queryset.last()
-        latest_adoption.end_at = timezone.now().date()
-        serializer.save(owner=self.request.user)
 

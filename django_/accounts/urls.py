@@ -8,5 +8,6 @@ urlpatterns = [
     path('auth/users/activate/<uid>/<token>', ActivateUser.as_view({'get': 'activation'}), name='emailactivate'),
     path('<int:id>/adoptions', UserAdoptionsView.as_view({'get': 'list'}), name='user.history'),
 
+    #temporary view - to be deleted later
     path('auth/social/complete/<provider>/', SocialAuthCompleteView.as_view(), name="social-auth-complete")
 ]

@@ -7,13 +7,16 @@ urlpatterns = [
     path('<int:pk>',
          OffersView.as_view({'get': 'retrieve','delete':'destroy'}) ,name='offers.details'),
 
+    #all requests for all offers (of the current user)
     path('requests', AdoptRequestsView.as_view({'get': 'list'}),name='requests'),
-    path('<int:pk>/request', AdoptRequestsView.as_view({'get': 'requestAdopt'}),name='requests.create'),
+
+    #requests for this only offer
+    path('<int:offer_id>/requests', AdoptRequestsView.as_view({ 'get':'list','post': 'requestAdopt'}),name='requests.create'),
     
-    path('requests/<int:pk>',
+    path('request/<int:pk>',
          AdoptRequestsView.as_view({'get': 'retrieve','delete':'destroy'}), name='requests.details'),
-    path('requests/<int:pk>/accept', 
+    path('request/<int:pk>/accept', 
          AdoptRequestsView.as_view({'get':'accept'}),name='requests.accept'),
-    path('requests/<int:pk>/reject',
+    path('request/<int:pk>/reject',
          AdoptRequestsView.as_view({'get':'destroy'}),name='requests.reject')
 ]

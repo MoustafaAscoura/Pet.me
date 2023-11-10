@@ -31,8 +31,8 @@
 # --------------------------------------------------------------------------
 
 from rest_framework import generics
-from .models import Post, Comment, Reply, Message, Report
-from .serializers import PostsSerializer, CommentSerializer, ReplySerializer, MessageSerializer, ReportsSerializer
+from .models import *
+from .serializers import *
 
 
 class PostListCreateAPIView(generics.ListCreateAPIView):
@@ -76,14 +76,3 @@ class ReplyListCreateAPIView(generics.ListCreateAPIView):
     queryset = Report.objects.all()
     serializer_class = ReplySerializer
     
-
-
-# ---- message ---
-class MessageListCreateAPIView(generics.ListCreateAPIView):
-    queryset = Message.objects.all()
-    serializer_class = MessageSerializer
-
-
-class MessagetRetreiveUpdateDeleteAPIView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Message.objects.all()
-    serializer_class = MessageSerializer
