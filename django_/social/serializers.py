@@ -1,51 +1,34 @@
 from rest_framework import serializers
 from .models import *
 
+class PhotoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Photo
+        fields = ('photo',)
 
 class PostsSerializer(serializers.ModelSerializer):
-    username = serializers.SerializerMethodField()
+    photos = PhotoSerializer(many=True, read_only=True)
 
     class Meta:
         model = Post
-        fields = ['id', 'created_at', 'modified_at', 'content', 'user', 'username']
-
-    def get_username(self, obj):
-        return obj.user.username
-
-
-
-class CommentSerializer(serializers.ModelSerializer):
-    username = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Comment 
-        fields = ['id', 'user', 'post', 'content', 'created_at', 'username']
-
-    def get_username(self, obj):
-        return obj.user.username
-
-
-
-
-
+        fields = '__all__'
+        depth = 1
 
 class ReplySerializer(serializers.ModelSerializer):
-    username = serializers.SerializerMethodField()
-
     class Meta:
-        model = Reply 
-        fields = ['id', 'user', 'comment', 'content', 'created_at', 'username']
-
-    def get_username(self, obj):
-        return obj.user.username
-
+        model = Reply
+        fields = '__all__'
+        depth = 1
     
-class ReportsSerializer(serializers.ModelSerializer):
-    username = serializers.SerializerMethodField()
+class CommentSerializer(serializers.ModelSerializer):
+    replies = ReplySerializer(many=True, read_only=True)
+    class Meta:
+        model = Comment
+        fields = '__all__'
+        depth = 1
 
+class ReportsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Report
-        fields = ['id', 'user', 'post', 'created_at', 'comment', 'reason', 'username']
-
-    def get_username(self, obj):
-        return obj.user.username
+        fields = '__all__'
+        depth = 1

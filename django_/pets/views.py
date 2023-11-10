@@ -27,7 +27,6 @@ class PetsView(viewsets.ModelViewSet):
             else:
                 Photo.objects.create(pet=pet,photo="/media/pets/images/dog_annon.png")
 
-
     def perform_update(self,serializer):
         pet = serializer.save()
         files = self.request.FILES.getlist('photos')

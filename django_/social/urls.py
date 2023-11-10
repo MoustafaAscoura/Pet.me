@@ -20,11 +20,18 @@ from django.urls import path
 from .views import *
 
 urlpatterns = [
-    path('posts/', PostListCreateAPIView.as_view(), name='post-list-create'),
-    path('posts/<int:pk>/', PostRetreiveUpdateDeleteAPIView.as_view(), name='post-retrieve-update-delete'),
-    path('posts/<int:pk>/report/', ReportPostCreateShowAPIView.as_view(), name='post-report'),
-    path('posts/<int:pk>/comment/', CommentListCreateAPIView.as_view(), name='comment-list-create'),
-    path('posts/<int:pk>/comment/<int:comment_id>/', CommentRetrieveUpdateDeleteAPIView.as_view(), name='comment-retrieve-update-delete'),
-    path('posts/<int:pk>/comment/<int:comment_id>/report/', ReportCommentCreateShowAPIView.as_view(), name='comment-report'),
-    path('posts/<int:pk>/comment/<int:comment_id>/reply/', ReplyListCreateAPIView.as_view(), name='comment-reply'),
+    path('', PostsView.as_view({'get': 'list', 'post':'create'}) ,name='posts'),
+    path('<int:pk>', 
+         PostsView.as_view({'get': 'retrieve', 'patch':'partial_update',
+                             'post':'update', 'delete':'destroy'}) ,name='posts.details'),
+
+    path('reports/', ReportsView.as_view({'get': 'list'}), name='reports'),
+    path('reports/<int:pk>', ReportsView.as_view({'get': 'retrieve','delete':'destroy'}), name='reports.details'),
+    path('<int:post_id>/reports/', ReportsView.as_view({'get': 'list', 'post':'create'}), name='post.report'),
+    path('comment/<int:comment_id>/reports/', ReportsView.as_view({'get': 'list', 'post':'create'}), name='comment.report'),
+
+    path('<int:post_id>/comments/', CommentsView.as_view({'get': 'list', 'post':'create'}), name='comment-list-create'),
+    path('comment/<int:comment_id>/', CommentsView.as_view({'get': 'retrieve','delete':'destroy'}), name='comment-retrieve-delete'),
+    path('comment/<int:comment_id>/replies/', ReplyView.as_view({'get': 'list', 'post':'create'}), name='comment-reply'),
+    path('comment/replies/<int:pk>', ReplyView.as_view({'get': 'retrieve','delete':'destroy'}), name='reply.details'),
 ]
