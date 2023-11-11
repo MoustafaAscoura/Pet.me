@@ -86,15 +86,17 @@ SIMPLE_JWT = {
 # Djoser Settings
 DJOSER = {
     'LOGIN_FIELD': 'email',
+    "ACTIVATION_URL": "accounts/users/activate/{uid}/{token}",
     'PASSWORD_RESET_CONFIRM_URL': 'password-reset/{uid}/{token}',
+    'USERNAME_RESET_CONFIRM_URL':'username-reset/{uid}/{token}',
+
     'SEND_ACTIVATION_EMAIL':True,
-    "ACTIVATION_URL": "accounts/auth/users/activate/{uid}/{token}",
     'PASSWORD_RESET_SHOW_EMAIL_NOT_FOUND': True,
     'TOKEN_MODEL':None,    
     "SOCIAL_AUTH_ALLOWED_REDIRECT_URIS": [
-        'http://localhost:8000/accounts/auth/social/complete/github/',
-        'http://localhost:8000/accounts/auth/social/complete/facebook/',
-        'http://localhost:8000/accounts/auth/social/complete/google-oauth2/',
+        'http://localhost:8000/accounts/social/complete/github/',
+        'http://localhost:8000/accounts/social/complete/facebook/',
+        'http://localhost:8000/accounts/social/complete/google-oauth2/',
     ],
 
     "SERIALIZERS": {
@@ -176,7 +178,7 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
+MEDIA_URL = 'media/'
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
@@ -197,9 +199,3 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
 SOCIAL_AUTH_FACEBOOK_KEY = "153943981107306"
 SOCIAL_AUTH_FACEBOOK_SECRET = "4b7b1ee8dd76f30370333a23fee61bfb"
 SOCIAL_AUTH_FACEBOOK_API_VERSION = '18.0'
-
-# SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
-# 'https://www.googleapis.com/auth/userinfo.email',
-# ]
-
-# SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']

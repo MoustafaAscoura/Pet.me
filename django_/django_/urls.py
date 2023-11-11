@@ -27,7 +27,4 @@ urlpatterns = [
     path('offers/', include('offers.urls') ),
     path('posts/', include('social.urls') ),
     path('chats/', include('chats.urls') ),
-    path('api/', include('social.urls')),
 ]
-
-

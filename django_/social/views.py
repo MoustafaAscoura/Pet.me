@@ -1,4 +1,5 @@
-from rest_framework import viewsets, generics
+from rest_framework import viewsets, generics, status
+from rest_framework.response import Response
 
 from .models import *
 from .serializers import *
@@ -28,12 +29,9 @@ class ReportsView(viewsets.ModelViewSet):
     def get_queryset(self):
         if self.kwargs.get('post_id'):
             return Report.objects.filter(post__id=self.kwargs['post_id'])
-        elif self.kwargs.get('comment_id'):
-            return Report.objects.filter(comment__id=self.kwargs['comment_id'])
         else:
             return Report.objects.all()
     
-    queryset = Report.objects.all()
     serializer_class = ReportsSerializer
 
     def perform_create(self, serializer):
@@ -45,34 +43,20 @@ class ReportsView(viewsets.ModelViewSet):
             post=comment.post
             serializer.save(user=self.request.user, post=post, comment=comment)
 
-# -- comment --
 class CommentsView(viewsets.ModelViewSet):
-    def get_queryset(self):
-        if self.kwargs.get('post_id'):
-            return Comment.objects.filter(post__id=self.kwargs['post_id'])
-        else:
-            return Comment.objects.all()
-
+    queryset=Comment.objects.all()
     serializer_class = CommentSerializer
 
-    def perform_create(self, serializer):
-        post = Post.objects.filter(id=self.kwargs['post_id']).first()
-        serializer.save(user=self.request.user, post=post)
-
-
-
+    def create(self, request, *args, **kwargs):
+        request.data['user'] = request.user.id
+        request.data['post'] = self.kwargs['post_id']
+        return super().create(request, *args, **kwargs)
 
 class ReplyView(viewsets.ModelViewSet):
-    def get_queryset(self):
-        if self.kwargs.get('comment_id'):
-            return Reply.objects.filter(comment__id=self.kwargs['comment_id'])
-        else:
-            return Reply.objects.all()
-
+    queryset = Reply.objects.all()
     serializer_class = ReplySerializer
 
-    def perform_create(self, serializer):
-        comment = Comment.objects.filter(id=self.kwargs['comment_id']).first()
-        serializer.save(user=self.request.user, comment=comment)
-
-
+    def create(self, request, *args, **kwargs):
+        request.data['user'] = request.user.id
+        request.data['comment'] = self.kwargs['comment_id']
+        return super().create(request, *args, **kwargs)

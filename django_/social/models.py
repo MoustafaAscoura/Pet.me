@@ -29,9 +29,6 @@ class Reply(models.Model):
     class Meta:
         ordering = ['-created_at']
 
-    def __str__(self):
-        return f'{self.user.username}' 
-
 class Report(models.Model):
     user=models.ForeignKey(User, on_delete=models.CASCADE, related_name="reports")
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="reports")
