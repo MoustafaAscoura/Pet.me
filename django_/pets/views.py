@@ -8,6 +8,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.throttling import UserRateThrottle, AnonRateThrottle
+from .permissons import UserPermission
+
 
 # Create your views here.
 
@@ -27,6 +29,7 @@ class PetsView(viewsets.ModelViewSet):
 
         
     serializer_class = PetSerializer
+    permission_classes = [UserPermission]
 
     def create(self, request, *args, **kwargs):
         request.data._mutable = True
