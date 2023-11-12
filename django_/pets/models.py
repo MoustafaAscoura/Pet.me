@@ -31,13 +31,13 @@ class Pet(models.Model):
             return self.photos.all().first().photo
         except:
             return None
-
+        
 
     def get_age(self):
         if self.birthdate:
             age =  timezone.now().date() - self.birthdate
             y = age.days // 365.25
-            m = (age.days % 365.25) // 12
+            m = (age.days % 365.25) // 30
             d = age.days % 30
             return {'years':y,'months':m, 'days':d}
     

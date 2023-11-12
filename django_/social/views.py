@@ -6,6 +6,8 @@ from .serializers import *
 
 
 class PostsView(viewsets.ModelViewSet):
+    search_fields=['user__username', 'content']
+
     queryset = Post.objects.all()
     serializer_class = PostsSerializer
 
@@ -15,8 +17,6 @@ class PostsView(viewsets.ModelViewSet):
         files = self.request.FILES.getlist('photos')
         if files:
             [Photo.objects.create(post=post,photo=f) for f in files]
-        else:
-            Photo.objects.create(post=post,photo="/media/posts/images/post.jpg")
 
     def perform_update(self,serializer):
         post = serializer.save()

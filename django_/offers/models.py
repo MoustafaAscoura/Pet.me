@@ -9,7 +9,6 @@ class Offer(models.Model):
     pet=models.ForeignKey(Pet, on_delete=models.CASCADE, related_name="offers")
     description=models.TextField(default="")
     created_at = models.DateField(auto_now_add=True)
-    available = models.BooleanField(default=True)
 
     class Meta:
         unique_together = ('user', 'pet',)

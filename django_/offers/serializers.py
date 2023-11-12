@@ -30,7 +30,7 @@ class OfferSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
     def to_representation(self, obj):
         data = super(OfferSerializer, self).to_representation(obj)
-        del data['pet']['owner']
+        del data['pet']['owner'], data['pet']['adoptions'],data['user']['pets'], data['user']['adoptions']
         return data
     
     class Meta:

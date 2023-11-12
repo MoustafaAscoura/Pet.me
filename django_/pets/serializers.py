@@ -1,6 +1,6 @@
 from rest_framework import serializers
+
 from .models import *
-# from accounts.serializers import UserSerializer
 
 class PhotoSerializer(serializers.ModelSerializer):
     class Meta:
@@ -46,4 +46,11 @@ class PetSerializer(serializers.ModelSerializer):
             'password': {'write_only': True},
             'birthdate': {'write_only': True, 'required': False},
         }
+    
+    def validate(self, attrs):
+        if attrs.get('birthdate') and attrs.get('birthdate') > timezone.now().date():
+            raise serializers.ValidationError('Birthdate cannot be greater than today!')
+        
+        return attrs
+
         
