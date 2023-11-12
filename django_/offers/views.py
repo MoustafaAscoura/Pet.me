@@ -42,7 +42,6 @@ class AdoptRequestsView(viewsets.ModelViewSet):
         adopt_request = self.get_object()
         adopt_offer = adopt_request.offer
         pet = adopt_offer.pet
-        owner = pet.owner
 
         #end ownership of old owner and create new adoption for new owner
         adoption = pet.adoptions.last()
@@ -52,9 +51,8 @@ class AdoptRequestsView(viewsets.ModelViewSet):
         pet.owner = adopt_request.user
         pet.save()
         
-        adopt_offer.available = False
-        adopt_offer.save()
-        adopt_request.delete()
         new_adoption = Adoption(user=adopt_request.user, pet=pet)
         new_adoption.save()
+        adopt_offer.delete()
+
         return Response('Accepted Adopt Request', status=status.HTTP_204_NO_CONTENT)

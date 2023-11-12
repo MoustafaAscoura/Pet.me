@@ -11,9 +11,14 @@ class Offer(models.Model):
     created_at = models.DateField(auto_now_add=True)
     available = models.BooleanField(default=True)
 
+    class Meta:
+        unique_together = ('user', 'pet',)
+
 class AdoptRequest(models.Model):
     user=models.ForeignKey(User, on_delete=models.CASCADE, related_name="requests")
     offer=models.ForeignKey(Offer, on_delete=models.CASCADE, related_name="requests")
     message=models.OneToOneField('chats.Message', on_delete=models.CASCADE)
     created_at = models.DateField(auto_now_add=True)
 
+    class Meta:
+        unique_together = ('user', 'offer',)

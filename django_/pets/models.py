@@ -1,3 +1,5 @@
+import datetime
+
 from django.db import models
 from django.utils import timezone
 
@@ -18,7 +20,7 @@ class Pet(models.Model):
     pet_type = models.CharField(max_length=10, choices=TYPE_CHOICES, null=True)
     species = models.CharField(max_length=50, null=True)
     color = models.CharField(max_length=20, null=True)
-    birthdate = models.DateField(null=True)
+    birthdate = models.DateField(default=datetime.date.today,null=True)
     owner = models.ForeignKey('accounts.User', on_delete=models.CASCADE, related_name='pets')
 
     def __str__(self):
@@ -39,6 +41,9 @@ class Pet(models.Model):
             d = age.days % 30
             return {'years':y,'months':m, 'days':d}
     
+    class Meta:
+        unique_together = ('owner', 'name','birthdate',)
+
 class Photo(models.Model):
     photo = models.ImageField(upload_to="pets/images/%Y/%m/%d/%H/%M/%S/", null=True, blank=True)
     pet = models.ForeignKey(Pet,on_delete=models.CASCADE, related_name='photos')

@@ -21,7 +21,6 @@ class ReplySerializer(serializers.ModelSerializer):
         fields = '__all__'
         optional_fields = ['user', 'comment']
 
-    
 class CommentSerializer(serializers.ModelSerializer):
     replies = ReplySerializer(many=True, read_only=True)
 

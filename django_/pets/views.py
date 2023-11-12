@@ -13,8 +13,12 @@ class PetsView(viewsets.ModelViewSet):
     queryset = Pet.objects.all()
     serializer_class = PetSerializer
 
+    def create(self, request, *args, **kwargs):
+        request.data['owner'] = request.user.id
+        return super().create(request, *args, **kwargs)
+    
     def perform_create(self, serializer):
-        pet = serializer.save(owner=self.request.user)
+        pet = serializer.save()
         adoption = Adoption(user=self.request.user, pet=pet)
         adoption.save()
 
@@ -40,10 +44,7 @@ class PetsView(viewsets.ModelViewSet):
                                                      description=request.data.get('description'))
         return Response('Pet is offered for adoption', status=status.HTTP_201_CREATED)
 
-
 class PetAdoptionsView(viewsets.ModelViewSet):
     def get_queryset(self):
         return Adoption.objects.filter(pet__id=self.kwargs['pk'])
     serializer_class = AdoptionSerializer
-
-
