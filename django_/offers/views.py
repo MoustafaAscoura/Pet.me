@@ -19,8 +19,9 @@ class OffersView(viewsets.ModelViewSet):
         alloffers = Offer.objects.all()
         pet_type = self.request.query_params.get('pet_type')
         gender = self.request.query_params.get('gender')
-        if gender: alloffers = alloffers.filter(pet__gender__icontains=gender)
-        if pet_type: alloffers = alloffers.filter(pet__pet_type__icontains=pet_type)
+
+        if gender: alloffers = alloffers.filter(pet__gender=gender)
+        if pet_type: alloffers = alloffers.filter(pet__pet_type=pet_type)
 
         return alloffers
     

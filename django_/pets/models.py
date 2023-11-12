@@ -28,7 +28,7 @@ class Pet(models.Model):
     
     def get_thumbnail(self):
         try:
-            return self.photos.all().first().photo
+            return self.photos.all().first().photo.url
         except:
             return None
         
@@ -40,6 +40,7 @@ class Pet(models.Model):
             m = (age.days % 365.25) // 30
             d = age.days % 30
             return {'years':y,'months':m, 'days':d}
+        return {'years':1,'months':0, 'days':0}
     
     class Meta:
         unique_together = ('owner', 'name','birthdate',)

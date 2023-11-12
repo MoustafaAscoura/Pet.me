@@ -36,6 +36,9 @@ class PetSerializer(serializers.ModelSerializer):
             "user_id": obj.owner.id,
             "user_picture": obj.owner.get_profile_picture(),
         }
+        if data['photos']:
+            data['thumbnail'] = data['photos'][0]['photo']
+
         return data
     
     class Meta:

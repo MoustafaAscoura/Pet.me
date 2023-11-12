@@ -29,11 +29,15 @@ class PetsView(viewsets.ModelViewSet):
     serializer_class = PetSerializer
 
     def create(self, request, *args, **kwargs):
+        request.data._mutable = True
         request.data['owner'] = request.user.id
+        request.data._mutable = False
         return super().create(request, *args, **kwargs)
     
     def update(self, request, *args, **kwargs):
+        request.data._mutable = True
         request.data['owner'] = request.user.id
+        request.data._mutable = False
         return super().update(request, *args, **kwargs)
 
     def perform_create(self, serializer):
@@ -46,9 +50,9 @@ class PetsView(viewsets.ModelViewSet):
             [Photo.objects.create(pet=pet,photo=f) for f in files]
         else:
             if serializer.data.get('pet_type') == 'Cat':
-                Photo.objects.create(pet=pet,photo="/media/pets/images/cat_annon.png")
+                Photo.objects.create(pet=pet,photo="pets/images/cat_annon.png")
             else:
-                Photo.objects.create(pet=pet,photo="/media/pets/images/dog_annon.png")
+                Photo.objects.create(pet=pet,photo="pets/images/dog_annon.png")
 
     def perform_update(self,serializer):
         pet = serializer.save()
@@ -64,7 +68,4 @@ class PetsView(viewsets.ModelViewSet):
         post = Post.objects.create(user=request.user, content=f"Hi, I am offering my pet, {offer.pet.name}, for adoption!")
         return Response('Pet is offered for adoption', status=status.HTTP_201_CREATED)
 
-class PetAdoptionsView(viewsets.ModelViewSet):
-    def get_queryset(self):
-        return Adoption.objects.filter(pet__id=self.kwargs['pk'])
-    serializer_class = AdoptionSerializer
+
