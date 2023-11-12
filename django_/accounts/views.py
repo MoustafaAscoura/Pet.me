@@ -4,6 +4,9 @@ from rest_framework import viewsets,status, generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.throttling import UserRateThrottle, AnonRateThrottle
+from rest_framework.permissions import IsAuthenticated
+
+
 
 from djoser.views import UserViewSet
 
@@ -22,6 +25,7 @@ class SocialAuthCompleteView(APIView):
 
 class UserListView(generics.ListCreateAPIView):
     throttle_classes = [AnonRateThrottle, UserRateThrottle]
+    permission_classes = [IsAuthenticated]
 
     queryset = User.objects.all()
     serializer_class = UserSerializer
