@@ -9,9 +9,10 @@ from pets.models import Adoption
 from chats.models import Message
 from social.models import Post
 from .serializers import OfferSerializer,AdoptRequestsSerializer
-
+from rest_framework.throttling import UserRateThrottle, AnonRateThrottle
 
 class OffersView(viewsets.ModelViewSet):
+    throttle_classes = [AnonRateThrottle, UserRateThrottle]
     search_fields=['pet__name', 'user__username', 'description']
 
     def get_queryset(self):

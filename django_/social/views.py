@@ -1,11 +1,14 @@
 from rest_framework import viewsets, generics, status
 from rest_framework.response import Response
+from rest_framework.throttling import UserRateThrottle, AnonRateThrottle
 
 from .models import *
 from .serializers import *
 
 
 class PostsView(viewsets.ModelViewSet):
+    throttle_classes = [AnonRateThrottle, UserRateThrottle]
+
     search_fields=['user__username', 'content']
 
     queryset = Post.objects.all()

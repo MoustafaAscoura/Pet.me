@@ -3,6 +3,8 @@ import requests
 from rest_framework import viewsets,status, generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.throttling import UserRateThrottle, AnonRateThrottle
+
 from djoser.views import UserViewSet
 
 from .models import User
@@ -19,6 +21,8 @@ class SocialAuthCompleteView(APIView):
         return Response(json_obj)
 
 class UserListView(generics.ListCreateAPIView):
+    throttle_classes = [AnonRateThrottle, UserRateThrottle]
+
     queryset = User.objects.all()
     serializer_class = UserSerializer
     search_fields=['username', 'first_name', 'last_name']

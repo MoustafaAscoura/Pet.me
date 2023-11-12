@@ -7,10 +7,12 @@ from .serializers import PetSerializer, AdoptionSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import viewsets
+from rest_framework.throttling import UserRateThrottle, AnonRateThrottle
 
 # Create your views here.
 
 class PetsView(viewsets.ModelViewSet):
+    throttle_classes = [AnonRateThrottle, UserRateThrottle]
     search_fields=['name', 'pet_type', 'species']
     ordering_fields=['birthdate']
 
