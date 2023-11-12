@@ -7,11 +7,24 @@ from rest_framework import viewsets
 from .models import Offer,AdoptRequest
 from pets.models import Adoption
 from chats.models import Message
+from social.models import Post
 from .serializers import OfferSerializer,AdoptRequestsSerializer
-
+from rest_framework.throttling import UserRateThrottle, AnonRateThrottle
 
 class OffersView(viewsets.ModelViewSet):
-    queryset = Offer.objects.all()
+    throttle_classes = [AnonRateThrottle, UserRateThrottle]
+    search_fields=['pet__name', 'user__username', 'description']
+
+    def get_queryset(self):
+        alloffers = Offer.objects.all()
+        pet_type = self.request.query_params.get('pet_type')
+        gender = self.request.query_params.get('gender')
+
+        if gender: alloffers = alloffers.filter(pet__gender=gender)
+        if pet_type: alloffers = alloffers.filter(pet__pet_type=pet_type)
+
+        return alloffers
+    
     serializer_class = OfferSerializer        
 
 class AdoptRequestsView(viewsets.ModelViewSet):
@@ -42,8 +55,7 @@ class AdoptRequestsView(viewsets.ModelViewSet):
         adopt_request = self.get_object()
         adopt_offer = adopt_request.offer
         pet = adopt_offer.pet
-        owner = pet.owner
-
+        old_owner = pet.owner
         #end ownership of old owner and create new adoption for new owner
         adoption = pet.adoptions.last()
         adoption.end_at = timezone.now().date()
@@ -52,9 +64,10 @@ class AdoptRequestsView(viewsets.ModelViewSet):
         pet.owner = adopt_request.user
         pet.save()
         
-        adopt_offer.available = False
-        adopt_offer.save()
-        adopt_request.delete()
         new_adoption = Adoption(user=adopt_request.user, pet=pet)
         new_adoption.save()
+        adopt_offer.delete()
+
+        post = Post.objects.create(user=pet.owner, content=f"Hi, I just adopted this pet, {pet.name} from {old_owner}!")
+
         return Response('Accepted Adopt Request', status=status.HTTP_204_NO_CONTENT)

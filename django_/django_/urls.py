@@ -16,6 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include 
+from django.conf.urls.static import static
+from django.conf import settings
 
 # from django.urls.conf import include, re_path
 
@@ -27,4 +29,4 @@ urlpatterns = [
     path('offers/', include('offers.urls') ),
     path('posts/', include('social.urls') ),
     path('chats/', include('chats.urls') ),
-]
+]  + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

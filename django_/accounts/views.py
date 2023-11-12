@@ -1,38 +1,35 @@
 import requests
 
-from rest_framework import viewsets,status
+from rest_framework import viewsets,status, generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.throttling import UserRateThrottle, AnonRateThrottle
+from rest_framework.permissions import IsAuthenticated
+
+
+
 from djoser.views import UserViewSet
-from django.urls import reverse
 
-
+from .models import User
+from .serializers import UserSerializer
 from pets.models import Adoption
 from pets.serializers import AdoptionSerializer
 
 
-class UserAdoptionsView(viewsets.ModelViewSet):
-    def get_queryset(self):
-        queryset = Adoption.objects.filter(user__id=self.kwargs['id'])
-    serializer_class = AdoptionSerializer
-
 class SocialAuthCompleteView(APIView):
-    permission_classes = []
-
     def get(self, request, provider):
         code, state = str(request.GET['code']), str(request.GET['state'])
         json_obj = {'code': code, 'state': state}
 
         return Response(json_obj)
-        protocol = 'https://' if request.is_secure() else 'http://'
-        web_url = protocol + request.get_host()
-        post_url = web_url + f"/accounts/auth/o/{provider}/"
 
+class UserListView(generics.ListCreateAPIView):
+    throttle_classes = [AnonRateThrottle, UserRateThrottle]
+    permission_classes = [IsAuthenticated]
 
-        headers = {'Content-type': 'application/x-www-form-urlencoded'}
-        result = requests.post(post_url, data = json_obj,headers=headers)
-        return Response(result.json())
-
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    search_fields=['username', 'first_name', 'last_name']
 
 #Activate user email
 class ActivateUser(UserViewSet):

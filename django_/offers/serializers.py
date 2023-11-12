@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import Offer,AdoptRequest
 from pets.serializers import PetSerializer
 from chats.serializers import MessageSerializer
+from accounts.serializers import UserSerializer
 
 class AdoptRequestsSerializer(serializers.ModelSerializer):
     message = MessageSerializer()
@@ -26,7 +27,13 @@ class AdoptRequestsSerializer(serializers.ModelSerializer):
 
 class OfferSerializer(serializers.ModelSerializer):
     pet = PetSerializer(read_only=True)
-
+    user = UserSerializer(read_only=True)
+    def to_representation(self, obj):
+        data = super(OfferSerializer, self).to_representation(obj)
+        del data['pet']['owner'], data['pet']['adoptions'],data['user']['pets'], data['user']['adoptions']
+        return data
+    
     class Meta:
         model = Offer
         fields = '__all__'
+        depth = 1

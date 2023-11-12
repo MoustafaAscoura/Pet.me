@@ -1,11 +1,16 @@
 from rest_framework import viewsets, generics, status
 from rest_framework.response import Response
+from rest_framework.throttling import UserRateThrottle, AnonRateThrottle
 
 from .models import *
 from .serializers import *
 
 
 class PostsView(viewsets.ModelViewSet):
+    throttle_classes = [AnonRateThrottle, UserRateThrottle]
+
+    search_fields=['user__username', 'content']
+
     queryset = Post.objects.all()
     serializer_class = PostsSerializer
 
@@ -15,8 +20,6 @@ class PostsView(viewsets.ModelViewSet):
         files = self.request.FILES.getlist('photos')
         if files:
             [Photo.objects.create(post=post,photo=f) for f in files]
-        else:
-            Photo.objects.create(post=post,photo="/media/posts/images/post.jpg")
 
     def perform_update(self,serializer):
         post = serializer.save()
@@ -48,8 +51,10 @@ class CommentsView(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
 
     def create(self, request, *args, **kwargs):
+        request.data._mutable = True
         request.data['user'] = request.user.id
         request.data['post'] = self.kwargs['post_id']
+        request.data._mutable = False
         return super().create(request, *args, **kwargs)
 
 class ReplyView(viewsets.ModelViewSet):
@@ -57,6 +62,10 @@ class ReplyView(viewsets.ModelViewSet):
     serializer_class = ReplySerializer
 
     def create(self, request, *args, **kwargs):
+        request.data._mutable = True
+
         request.data['user'] = request.user.id
         request.data['comment'] = self.kwargs['comment_id']
+        request.data._mutable = False
+
         return super().create(request, *args, **kwargs)

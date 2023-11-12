@@ -1,28 +1,5 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# dependencies
-pet-me/node_modules
-pet-me/.pnp
-pet-me/.pnp.js
-
-# testing
-pet-me/coverage
-
-# production
-pet-me/build
-
-# misc
-pet-me/.DS_Store
-pet-me/.env
-pet-me/.env.local
-pet-me/.env.development.local
-pet-me/.env.test.local
-pet-me/.env.production.local
-
-pet-me/npm-debug.log*
-pet-me/yarn-debug.log*
-pet-me/yarn-error.log*
-
 .venv/
 __pycache__/
 
