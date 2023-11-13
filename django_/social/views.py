@@ -5,12 +5,14 @@ from rest_framework.throttling import UserRateThrottle, AnonRateThrottle
 from .models import *
 from .serializers import *
 
+from rest_framework.permissions import IsAdminUser
+from .permissons import UserPermission
 
 class PostsView(viewsets.ModelViewSet):
     throttle_classes = [AnonRateThrottle, UserRateThrottle]
 
     search_fields=['user__username', 'content']
-
+    permission_classes = [UserPermission]
     queryset = Post.objects.all()
     serializer_class = PostsSerializer
 
@@ -29,6 +31,7 @@ class PostsView(viewsets.ModelViewSet):
             for f in files: Photo.objects.create(post=post,photo=f)
 
 class ReportsView(viewsets.ModelViewSet):
+    permission_classes = [IsAdminUser]
     def get_queryset(self):
         if self.kwargs.get('post_id'):
             return Report.objects.filter(post__id=self.kwargs['post_id'])
