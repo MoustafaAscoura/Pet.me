@@ -5,9 +5,13 @@ from accounts.models import User
 from .serializers import *
 from .models import *
 
+from rest_framework.permissions import IsAuthenticated
+from .permissons import UserPermission
+
 class MessagesView(viewsets.ModelViewSet):
     search_fields=['content']
     pagination.PageNumberPagination.page_size = 50 
+    permission_classes = [IsAuthenticated, UserPermission]
 
     def get_queryset(self):
         curr_user = self.request.user
