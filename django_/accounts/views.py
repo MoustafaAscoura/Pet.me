@@ -21,6 +21,12 @@ class UserListView(generics.ListAPIView):
     serializer_class = UserSerializer
     search_fields=['username', 'first_name', 'last_name']
 
+class UserRetrieveView(generics.RetrieveAPIView):
+    throttle_classes = [AnonRateThrottle, UserRateThrottle]
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+
 #Activate user email
 class ActivateUser(UserViewSet):
     def get_serializer(self, *args, **kwargs):
