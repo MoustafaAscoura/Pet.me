@@ -10,10 +10,12 @@ from chats.models import Message
 from social.models import Post
 from .serializers import OfferSerializer,AdoptRequestsSerializer
 from rest_framework.throttling import UserRateThrottle, AnonRateThrottle
+from .permissons import UserPermission
 
 class OffersView(viewsets.ModelViewSet):
     throttle_classes = [AnonRateThrottle, UserRateThrottle]
     search_fields=['pet__name', 'user__username', 'description']
+    permission_classes = [UserPermission]
 
     def get_queryset(self):
         alloffers = Offer.objects.all()
@@ -28,6 +30,7 @@ class OffersView(viewsets.ModelViewSet):
     serializer_class = OfferSerializer        
 
 class AdoptRequestsView(viewsets.ModelViewSet):
+    permission_classes = [UserPermission]
     def get_queryset(self):
         if self.kwargs.get('offer_id'):
             return AdoptRequest.objects.filter(offer__id=self.kwargs['offer_id'])
