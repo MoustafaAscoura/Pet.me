@@ -14,8 +14,6 @@ urlpatterns = [
      #requests for this only offer
      path('<int:offer_id>/requests/', AdoptRequestsView.as_view({ 'get':'list','post': 'requestAdopt'}),name='requests.create'),
      
-     path('request/<int:pk>/',
-          AdoptRequestsView.as_view({'delete':'destroy'}), name='requests.details'),
      path('request/<int:pk>/accept/', 
           AdoptRequestsView.as_view({'get':'accept'}),name='requests.accept'),
      path('request/<int:pk>/reject/',

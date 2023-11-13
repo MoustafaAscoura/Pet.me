@@ -7,7 +7,7 @@ from chats.models import Message
 class Offer(models.Model):
     user=models.ForeignKey(User, on_delete=models.CASCADE, related_name="offers")
     pet=models.ForeignKey(Pet, on_delete=models.CASCADE, related_name="offers")
-    description=models.TextField(default="")
+    description=models.TextField(default="", null=True)
     created_at = models.DateField(auto_now_add=True)
 
     class Meta:

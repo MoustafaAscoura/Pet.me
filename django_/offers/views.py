@@ -1,6 +1,7 @@
 from rest_framework.response import Response
 from rest_framework import status
 from django.shortcuts import get_object_or_404
+from django.db import IntegrityError
 
 from django.utils import timezone
 from rest_framework import viewsets
@@ -10,12 +11,12 @@ from chats.models import Message
 from social.models import Post
 from .serializers import OfferSerializer,AdoptRequestsSerializer
 from rest_framework.throttling import UserRateThrottle, AnonRateThrottle
-from .permissons import UserPermission
+from .permissons import OfferPermission, RequestPermission
 
 class OffersView(viewsets.ModelViewSet):
     throttle_classes = [AnonRateThrottle, UserRateThrottle]
     search_fields=['pet__name', 'user__username', 'description']
-    permission_classes = [UserPermission]
+    permission_classes = [OfferPermission]
 
     def get_queryset(self):
         alloffers = Offer.objects.all()
@@ -30,7 +31,7 @@ class OffersView(viewsets.ModelViewSet):
     serializer_class = OfferSerializer        
 
 class AdoptRequestsView(viewsets.ModelViewSet):
-    permission_classes = [UserPermission]
+    permission_classes = [RequestPermission]
     def get_queryset(self):
         if self.kwargs.get('offer_id'):
             return AdoptRequest.objects.filter(offer__id=self.kwargs['offer_id'])
@@ -39,20 +40,18 @@ class AdoptRequestsView(viewsets.ModelViewSet):
 
     serializer_class = AdoptRequestsSerializer
 
-    def requestAdopt(self, request, pk):
-        message = request.data.get('message', 'I request to adopt this pet!')
-        user=request.user
-        offer=get_object_or_404(Offer,pk=self.kwargs['pk'])
+    def requestAdopt(self, request, offer_id):
+        try:
+            message = request.data.get('message', 'I request to adopt this pet!')
+            user=request.user
+            offer=get_object_or_404(Offer,pk=self.kwargs['offer_id'])
+            message_ = Message.objects.create(sender=user, receiver=offer.user,content=message)
+            req = AdoptRequest.objects.create(user=user, offer=offer,message=message_)
+            return Response("Request sent successfully",status=status.HTTP_201_CREATED)
 
-        if not offer.available:
-            return Response("Offer is no more available",status=status.HTTP_400_BAD_REQUEST)
-        elif user == offer.user:
-            return Response("Cannot Perform request on owned offer",status=status.HTTP_400_BAD_REQUEST)
+        except IntegrityError:
+            return Response("You already have a request", status=status.HTTP_400_BAD_REQUEST)
 
-        message_ = Message.objects.create(sender=user, receiver=offer.user,content=message)
-        req = AdoptRequest.objects.create(user=user, offer=offer,message=message_)
-        
-        return Response("Request sent successfully",status=status.HTTP_201_CREATED)
 
     def accept(self,request, pk):
         adopt_request = self.get_object()

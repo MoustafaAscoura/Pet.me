@@ -4,15 +4,13 @@ from rest_framework.throttling import UserRateThrottle, AnonRateThrottle
 
 from .models import *
 from .serializers import *
-
-from rest_framework.permissions import IsAdminUser
-from .permissons import UserPermission
+from .permissons import *
 
 class PostsView(viewsets.ModelViewSet):
     throttle_classes = [AnonRateThrottle, UserRateThrottle]
 
     search_fields=['user__username', 'content']
-    permission_classes = [UserPermission]
+    permission_classes = [PostsPermission]
     queryset = Post.objects.all()
     serializer_class = PostsSerializer
 
@@ -31,7 +29,7 @@ class PostsView(viewsets.ModelViewSet):
             for f in files: Photo.objects.create(post=post,photo=f)
 
 class ReportsView(viewsets.ModelViewSet):
-    permission_classes = [IsAdminUser]
+    permission_classes = [reportsPermission]
     def get_queryset(self):
         if self.kwargs.get('post_id'):
             return Report.objects.filter(post__id=self.kwargs['post_id'])
@@ -50,13 +48,14 @@ class ReportsView(viewsets.ModelViewSet):
             serializer.save(user=self.request.user, post=post, comment=comment)
 
 class CommentsView(viewsets.ModelViewSet):
+    permission_classes = [CommentsPermission]
     queryset=Comment.objects.all()
     serializer_class = CommentSerializer
-
 
 class ReplyView(viewsets.ModelViewSet):
     queryset = Reply.objects.all()
     serializer_class = ReplySerializer
+    permission_classes = [CommentsPermission]
 
     def create(self, request, *args, **kwargs):
         request.data['comment'] = self.kwargs['comment_id']
