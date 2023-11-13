@@ -3,6 +3,7 @@ from .views import *
 
 urlpatterns = [
     path('users/list/', UserListView.as_view()),
+    path('users/<int:pk>/', UserRetrieveView.as_view()),
     path('users/activate/<uid>/<token>', ActivateUser.as_view({'get': 'activation'}), name='emailactivate'),
 
     #temporary view - to be deleted later
