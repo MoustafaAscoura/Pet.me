@@ -2,7 +2,7 @@ from django.urls import path, include
 from .views import *
 
 urlpatterns = [
-    path('users/', UserListView.as_view()),
+    path('users/list/', UserListView.as_view()),
     path('users/activate/<uid>/<token>', ActivateUser.as_view({'get': 'activation'}), name='emailactivate'),
 
     #temporary view - to be deleted later

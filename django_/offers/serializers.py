@@ -7,11 +7,12 @@ from accounts.serializers import UserSerializer
 class AdoptRequestsSerializer(serializers.ModelSerializer):
     message = MessageSerializer()
     def to_representation(self, obj):
+        data = super(AdoptRequestsSerializer, self).to_representation(obj)
         return {
             "request_id": obj.id,
             "username": obj.user.full_name,
             "user_id": obj.user.id, 
-            "user_picture": obj.user.get_profile_picture(),
+            "user_picture": data['user']['picture'],
             "petname": obj.offer.pet.name,
             "pet_id": obj.offer.pet.id,
             "created_at": obj.created_at,
@@ -22,6 +23,7 @@ class AdoptRequestsSerializer(serializers.ModelSerializer):
         model = AdoptRequest
         fields='__all__'
         read_only_fields = ('id','created_at',  )
+        depth = 1
 
 
 

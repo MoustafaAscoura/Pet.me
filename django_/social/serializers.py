@@ -8,10 +8,12 @@ class PhotoSerializer(serializers.ModelSerializer):
 
 class ReplySerializer(serializers.ModelSerializer):
     def to_representation(self, obj):
+        data = super(ReplySerializer, self).to_representation(obj)
+
         return {
             "username": obj.user.full_name,
             "user_id": obj.user.id,
-            "user_picture": obj.user.get_profile_picture(),
+            "user_picture": data['user']['picture'],
             "content": obj.content,
             "reply_id": obj.id,
             "created_at": obj.created_at,
@@ -19,6 +21,7 @@ class ReplySerializer(serializers.ModelSerializer):
     class Meta:
         model = Reply
         fields = '__all__'
+        depth = 1
         optional_fields = ['user', 'comment']
 
 class CommentSerializer(serializers.ModelSerializer):
@@ -33,7 +36,7 @@ class CommentSerializer(serializers.ModelSerializer):
             "created_at": obj.created_at,
             "username": obj.user.full_name,
             "user_id": obj.user.id,
-            "user_picture": obj.user.get_profile_picture(),
+            "user_picture": data['user']['picture'],
         }
 
     class Meta:
@@ -48,7 +51,7 @@ class ReportsSerializer(serializers.ModelSerializer):
         data['user'] = {
             "username": obj.user.full_name,
             "user_id": obj.user.id,
-            "user_picture": obj.user.get_profile_picture(),
+            "user_picture": data['user']['picture'],
         }
         return data
         
@@ -66,7 +69,7 @@ class PostsSerializer(serializers.ModelSerializer):
         data['user'] = {
             "username": obj.user.full_name,
             "user_id": obj.user.id,
-            "user_picture": obj.user.get_profile_picture(),
+            "user_picture": data['user']['picture'],
         }
         return data
     

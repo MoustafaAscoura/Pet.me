@@ -1,20 +1,12 @@
-import requests
-
-from rest_framework import viewsets,status, generics
+from rest_framework import status, generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.throttling import UserRateThrottle, AnonRateThrottle
-from rest_framework.permissions import IsAuthenticated
-
-
 
 from djoser.views import UserViewSet
 
 from .models import User
 from .serializers import UserSerializer
-from pets.models import Adoption
-from pets.serializers import AdoptionSerializer
-
 
 class SocialAuthCompleteView(APIView):
     def get(self, request, provider):
@@ -23,10 +15,8 @@ class SocialAuthCompleteView(APIView):
 
         return Response(json_obj)
 
-class UserListView(generics.ListCreateAPIView):
+class UserListView(generics.ListAPIView):
     throttle_classes = [AnonRateThrottle, UserRateThrottle]
-    permission_classes = [IsAuthenticated]
-
     queryset = User.objects.all()
     serializer_class = UserSerializer
     search_fields=['username', 'first_name', 'last_name']
