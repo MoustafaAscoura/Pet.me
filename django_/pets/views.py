@@ -31,18 +31,6 @@ class PetsView(viewsets.ModelViewSet):
     serializer_class = PetSerializer
     permission_classes = [UserPermission]
 
-    def create(self, request, *args, **kwargs):
-        request.data._mutable = True
-        request.data['owner'] = request.user.id
-        request.data._mutable = False
-        return super().create(request, *args, **kwargs)
-    
-    def update(self, request, *args, **kwargs):
-        request.data._mutable = True
-        request.data['owner'] = request.user.id
-        request.data._mutable = False
-        return super().update(request, *args, **kwargs)
-
     def perform_create(self, serializer):
         pet = serializer.save()
         adoption = Adoption(user=self.request.user, pet=pet)

@@ -2,19 +2,13 @@ from rest_framework import permissions
 
 class UserPermission(permissions.BasePermission):
     def has_permission(self, request, view):
-        if view.action == 'list':
-            return True  # Allow all users to list/view pets
-        elif view.action == 'create':
+        if view.action == 'create':
             return request.user.is_authenticated  # Only allow authenticated users to create pets
-        elif view.action in ['retrieve', 'destroy']:
-            return True  # Allow all users to retrieve, update, and delete pets
         else:
-            return False  # Deny all other actions
+            return True  # Deny all other actions
 
     def has_object_permission(self, request, view, obj):
-        if view.action == 'retrieve':
-            return True  # Allow all users to retrieve (view) the pet
-        elif view.action in ['destroy', 'offerPet']:
+        if view.action in ['destroy', 'partial_update', 'update']:
             return obj.owner == request.user  # Only allow the owner of the pet to update or delete it
         else:
-            return False
+            return True

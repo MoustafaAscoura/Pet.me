@@ -53,22 +53,12 @@ class CommentsView(viewsets.ModelViewSet):
     queryset=Comment.objects.all()
     serializer_class = CommentSerializer
 
-    def create(self, request, *args, **kwargs):
-        request.data._mutable = True
-        request.data['user'] = request.user.id
-        request.data['post'] = self.kwargs['post_id']
-        request.data._mutable = False
-        return super().create(request, *args, **kwargs)
 
 class ReplyView(viewsets.ModelViewSet):
     queryset = Reply.objects.all()
     serializer_class = ReplySerializer
 
     def create(self, request, *args, **kwargs):
-        request.data._mutable = True
-
-        request.data['user'] = request.user.id
         request.data['comment'] = self.kwargs['comment_id']
-        request.data._mutable = False
 
         return super().create(request, *args, **kwargs)

@@ -55,6 +55,7 @@ class PetSerializer(serializers.ModelSerializer):
         }
     
     def validate(self, attrs):
+        attrs['owner'] = self.context['request'].user
         if attrs.get('birthdate') and attrs.get('birthdate') > timezone.now().date():
             raise serializers.ValidationError('Birthdate cannot be greater than today!')
         

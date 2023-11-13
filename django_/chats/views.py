@@ -14,14 +14,18 @@ class MessagesView(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, UserPermission]
 
     def get_queryset(self):
-        curr_user = self.request.user
-        other_user = self.kwargs['user_id']
-        criteria1 = Q(sender=curr_user) & Q(receiver=other_user)
-        criteria2 = Q(sender=other_user) & Q(receiver=curr_user)
+        if self.kwargs.get('user_id'):
+            curr_user = self.request.user
+            other_user = self.kwargs['user_id']
+            criteria1 = Q(sender=curr_user) & Q(receiver=other_user)
+            criteria2 = Q(sender=other_user) & Q(receiver=curr_user)
 
-        return Message.objects.filter(Q(criteria1) | Q(criteria2))
+            return Message.objects.filter(Q(criteria1) | Q(criteria2))
+
+        return Message.objects.all()
+    
     serializer_class = MessageSerializer
 
     def perform_create(self, serializer):
-        receiver = User.objects.filter(id=self.kwargs['receiver_id']).first()
+        receiver = User.objects.filter(id=self.kwargs['user_id']).first()
         serializer.save(sender=self.request.user, receiver=receiver)

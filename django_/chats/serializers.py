@@ -19,6 +19,7 @@ class MessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Message
         fields = '__all__'
+        depth = 1
         read_only_fields = ('created_at','sender','receiver')
 
 

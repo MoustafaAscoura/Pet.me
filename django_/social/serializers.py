@@ -23,6 +23,11 @@ class ReplySerializer(serializers.ModelSerializer):
         fields = '__all__'
         depth = 1
         optional_fields = ['user', 'comment']
+    
+    def validate(self, attrs):
+        attrs['user'] = self.context['request'].user
+        
+        return attrs
 
 class CommentSerializer(serializers.ModelSerializer):
     replies = ReplySerializer(many=True, read_only=True)
@@ -44,6 +49,11 @@ class CommentSerializer(serializers.ModelSerializer):
         fields = '__all__'
         depth = 1
         read_only_fields = ('id', 'created_at')
+    
+    def validate(self, attrs):
+        attrs['user'] = self.context['request'].user
+        
+        return attrs
 
 class ReportsSerializer(serializers.ModelSerializer):
     def to_representation(self, obj):
@@ -61,6 +71,11 @@ class ReportsSerializer(serializers.ModelSerializer):
         depth=1
         read_only_fields = ('id', 'created_at')
 
+    def validate(self, attrs):
+        attrs['user'] = self.context['request'].user
+        
+        return attrs
+    
 class PostsSerializer(serializers.ModelSerializer):
     photos = PhotoSerializer(many=True, read_only=True)
     comments = CommentSerializer(many=True, read_only=True)
@@ -78,3 +93,8 @@ class PostsSerializer(serializers.ModelSerializer):
         fields = '__all__'
         depth = 1
         read_only_fields = ('id', 'created_at')
+
+    def validate(self, attrs):
+        attrs['user'] = self.context['request'].user
+        
+        return attrs
