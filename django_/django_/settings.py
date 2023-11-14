@@ -72,6 +72,9 @@ REST_FRAMEWORK = {
     }
 }
 
+DOMAIN = "127.0.0.1:3000"
+SITE_NAME = "PetMe"
+
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
@@ -107,9 +110,9 @@ DJOSER = {
     'PASSWORD_RESET_SHOW_EMAIL_NOT_FOUND': True,
     'TOKEN_MODEL':None,    
     "SOCIAL_AUTH_ALLOWED_REDIRECT_URIS": [
-        'http://localhost:8000/accounts/social/complete/github/',
-        'http://localhost:8000/accounts/social/complete/facebook/',
-        'http://localhost:8000/accounts/social/complete/google-oauth2/',
+        'http://localhost:3000/accounts/social/complete/github/',
+        'http://localhost:3000/accounts/social/complete/facebook/',
+        'http://localhost:3000/accounts/social/complete/google-oauth2/',
     ],
 
     "SERIALIZERS": {

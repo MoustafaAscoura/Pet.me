@@ -40,7 +40,7 @@ class User(AbstractUser, PermissionsMixin):
     def get_profile_picture(self):
         if self.picture:
             return self.picture.url
-        return "/media/accounts/images/annon.png"
+        return "/accounts/images/annon.png"
     
     def __str__(self) -> str:
         return self.username

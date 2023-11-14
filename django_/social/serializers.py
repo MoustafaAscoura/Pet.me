@@ -11,11 +11,11 @@ class ReplySerializer(serializers.ModelSerializer):
         data = super(ReplySerializer, self).to_representation(obj)
 
         return {
+            "id": obj.id,
             "username": obj.user.full_name,
             "user_id": obj.user.id,
             "user_picture": data['user']['picture'],
             "content": obj.content,
-            "reply_id": obj.id,
             "created_at": obj.created_at,
         }
     class Meta:
@@ -26,6 +26,7 @@ class ReplySerializer(serializers.ModelSerializer):
     
     def validate(self, attrs):
         attrs['user'] = self.context['request'].user
+        attrs['comment'] = Comment.objects.filter(id=self.initial_data['comment']).first()
         
         return attrs
 
@@ -35,7 +36,7 @@ class CommentSerializer(serializers.ModelSerializer):
     def to_representation(self, obj):
         data = super(CommentSerializer, self).to_representation(obj)
         return {
-            "comment_id": obj.id,
+            "id": obj.id,
             "replies": data['replies'],
             "content": obj.content,
             "created_at": obj.created_at,
