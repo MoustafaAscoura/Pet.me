@@ -102,17 +102,17 @@ SIMPLE_JWT = {
 # Djoser Settings
 DJOSER = {
     'LOGIN_FIELD': 'email',
-    "ACTIVATION_URL": "accounts/users/activate/{uid}/{token}",
-    'PASSWORD_RESET_CONFIRM_URL': 'password-reset/{uid}/{token}',
-    'USERNAME_RESET_CONFIRM_URL':'username-reset/{uid}/{token}',
+    "ACTIVATION_URL": "register/activate/{uid}/{token}",
+    'PASSWORD_RESET_CONFIRM_URL': 'register/password-reset/{uid}/{token}',
+    'USERNAME_RESET_CONFIRM_URL':'register/username-reset/{uid}/{token}',
 
     'SEND_ACTIVATION_EMAIL':True,
     'PASSWORD_RESET_SHOW_EMAIL_NOT_FOUND': True,
     'TOKEN_MODEL':None,    
     "SOCIAL_AUTH_ALLOWED_REDIRECT_URIS": [
-        'http://localhost:3000/accounts/social/complete/github/',
-        'http://localhost:3000/accounts/social/complete/facebook/',
-        'http://localhost:3000/accounts/social/complete/google-oauth2/',
+        'http://localhost:3000/register/social/complete/github/',
+        'http://localhost:3000/register/social/complete/facebook/',
+        'http://localhost:3000/register/social/complete/google-oauth2/',
     ],
 
     "SERIALIZERS": {
