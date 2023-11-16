@@ -1,5 +1,7 @@
 from django.db.models import Q
 from rest_framework import viewsets, pagination
+from django.http import JsonResponse
+from itertools import chain
 
 from accounts.models import User
 from .serializers import *
@@ -14,16 +16,25 @@ class MessagesView(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, UserPermission]
 
     def get_queryset(self):
+        curr_user = self.request.user
+
         if self.kwargs.get('user_id'):
-            curr_user = self.request.user
             other_user = self.kwargs['user_id']
             criteria1 = Q(sender=curr_user) & Q(receiver=other_user)
             criteria2 = Q(sender=other_user) & Q(receiver=curr_user)
 
             return Message.objects.filter(Q(criteria1) | Q(criteria2))
 
-        return Message.objects.all()
-    
+    def relatedUsers(self, request):
+        curr_user = self.request.user
+        people1 = curr_user.sent_messages.values_list('receiver__id','receiver__picture',
+                                         'receiver__username', 'receiver__first_name', 'receiver__last_name')
+        people2 = curr_user.received_messages.values_list('sender__id','sender__picture','sender__username', 'sender__first_name',
+                                         'sender__last_name')
+        
+        result_list = set(chain(people1, people2))
+        return JsonResponse(list(result_list), safe=False)
+
     serializer_class = MessageSerializer
 
     def perform_create(self, serializer):
