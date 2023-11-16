@@ -1,4 +1,6 @@
 from rest_framework import serializers
+import re
+from django.core.files.images import get_image_dimensions
 
 from .models import User
 from pets.serializers import PetSerializer, AdoptionSerializer
@@ -27,3 +29,23 @@ class UserSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'password': {'write_only': True}
         }
+    
+    def validate_picture(self, picture):
+        w, h = get_image_dimensions(picture)
+
+        if (picture and picture.size > 2000000) :
+            raise serializers.ValidationError("Image size should be less than 2 Mbs")
+        elif w < 400 or h < 400:
+            raise serializers.ValidationError("Image dimensions should be greater than 400 pixels")
+
+        return picture
+    
+        
+    def validate_phone(self, phone):
+        re.compile('^01[0125]{1}[0-9]{8}$')
+        if re.fullmatch('^01[0125]{1}[0-9]{8}$',phone) or phone=="":
+            return phone
+        else:
+            raise serializers.ValidationError("Phone must match Egyptian format")
+
+
