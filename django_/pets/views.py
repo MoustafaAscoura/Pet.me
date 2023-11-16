@@ -15,15 +15,15 @@ from .permissons import UserPermission
 
 class PetsView(viewsets.ModelViewSet):
     throttle_classes = [AnonRateThrottle, UserRateThrottle]
-    search_fields=['name', 'pet_type', 'species']
+    search_fields=['name', 'species']
     ordering_fields=['birthdate']
 
     def get_queryset(self):
         allpets = Pet.objects.all()
-        pet_type = self.request.query_params.get('pet_type')
+        species = self.request.query_params.get('species')
         gender = self.request.query_params.get('gender')
         if gender: allpets = allpets.filter(gender__icontains=gender)
-        if pet_type: allpets = allpets.filter(pet_type__icontains=pet_type)
+        if species: allpets = allpets.filter(species__icontains=species)
 
         return allpets
 
@@ -40,7 +40,7 @@ class PetsView(viewsets.ModelViewSet):
         if files:
             [Photo.objects.create(pet=pet,photo=f) for f in files]
         else:
-            if serializer.data.get('pet_type') == 'Cat':
+            if serializer.data.get('species') == 'Cat':
                 Photo.objects.create(pet=pet,photo="pets/images/cat_annon.png")
             else:
                 Photo.objects.create(pet=pet,photo="pets/images/dog_annon.png")

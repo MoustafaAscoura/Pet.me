@@ -16,7 +16,7 @@ class Offer(models.Model):
 class AdoptRequest(models.Model):
     user=models.ForeignKey(User, on_delete=models.CASCADE, related_name="requests")
     offer=models.ForeignKey(Offer, on_delete=models.CASCADE, related_name="requests")
-    message=models.OneToOneField('chats.Message', on_delete=models.CASCADE)
+    message=models.OneToOneField('chats.Message', on_delete=models.CASCADE, null=True)
     created_at = models.DateField(auto_now_add=True)
 
     class Meta:

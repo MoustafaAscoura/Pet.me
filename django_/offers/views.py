@@ -20,11 +20,11 @@ class OffersView(viewsets.ModelViewSet):
 
     def get_queryset(self):
         alloffers = Offer.objects.all()
-        pet_type = self.request.query_params.get('pet_type')
+        species = self.request.query_params.get('species')
         gender = self.request.query_params.get('gender')
 
         if gender: alloffers = alloffers.filter(pet__gender=gender)
-        if pet_type: alloffers = alloffers.filter(pet__pet_type=pet_type)
+        if species: alloffers = alloffers.filter(pet__species=species)
 
         return alloffers
     
@@ -41,17 +41,18 @@ class AdoptRequestsView(viewsets.ModelViewSet):
     serializer_class = AdoptRequestsSerializer
 
     def requestAdopt(self, request, offer_id):
-        try:
-            message = request.data.get('message', 'I request to adopt this pet!')
-            user=request.user
-            offer=get_object_or_404(Offer,pk=self.kwargs['offer_id'])
-            message_ = Message.objects.create(sender=user, receiver=offer.user,content=message)
-            req = AdoptRequest.objects.create(user=user, offer=offer,message=message_)
-            return Response("Request sent successfully",status=status.HTTP_201_CREATED)
+        message = request.data.get('message', 'I request to adopt this pet!')
+        user=request.user
+        offer=get_object_or_404(Offer,pk=self.kwargs['offer_id'])
+        message_ = Message.objects.create(sender=user, receiver=offer.user,content=message)
 
+        try:
+            req = AdoptRequest.objects.create(user=user, offer=offer,message=message_)
         except IntegrityError:
+            message_.delete()
             return Response("You already have a request", status=status.HTTP_400_BAD_REQUEST)
 
+        return Response("Request sent successfully",status=status.HTTP_201_CREATED)
 
     def accept(self,request, pk):
         adopt_request = self.get_object()

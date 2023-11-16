@@ -29,7 +29,7 @@ class User(AbstractUser, PermissionsMixin):
 
     gender = models.CharField(max_length=6, choices=GENDER_CHOICES, null=True)
     phone = models.CharField(max_length=11,blank=True)
-    picture = models.ImageField(upload_to="accounts/images/%Y/%m/%d/%H/%M/%S/", null=True, default="/media/accounts/images/annon.png")
+    picture = models.ImageField(upload_to="accounts/images/%Y/%m/%d/%H/%M/%S/", null=True, default="/accounts/images/annon.png")
     birthdate = models.DateField(null=True,blank=True)
     profile_url = models.URLField(null=True,blank=True)
 
