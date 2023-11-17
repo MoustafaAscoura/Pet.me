@@ -51,7 +51,6 @@ class PetSerializer(serializers.ModelSerializer):
         depth = 1
         extra_kwargs = {
             'password': {'write_only': True},
-            'birthdate': {'write_only': True, 'required': False},
         }
     
     def validate(self, attrs):
