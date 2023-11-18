@@ -19,14 +19,14 @@ class PostsView(viewsets.ModelViewSet):
 
         files = self.request.FILES.getlist('photos')
         if files:
-            [Photo.objects.create(post=post,photo=f) for f in files]
+            [Photo.objects.create(post=post,photo=f) for f in files[0:4]]
 
     def perform_update(self,serializer):
         post = serializer.save()
         files = self.request.FILES.getlist('photos')
         if files:
             for old_photo in post.photos.all(): old_photo.delete()
-            for f in files: Photo.objects.create(post=post,photo=f)
+            for f in files[0:4]: Photo.objects.create(post=post,photo=f)
 
 class ReportsView(viewsets.ModelViewSet):
     permission_classes = [reportsPermission]

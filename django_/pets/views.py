@@ -39,7 +39,7 @@ class PetsView(viewsets.ModelViewSet):
 
         files = self.request.FILES.getlist('photos')
         if files:
-            [Photo.objects.create(pet=pet,photo=f) for f in files]
+            [Photo.objects.create(pet=pet,photo=f) for f in files[0:4]]
         else:
             if serializer.data.get('species') == 'Cat':
                 Photo.objects.create(pet=pet,photo="pets/images/cat_annon.png")
@@ -51,7 +51,7 @@ class PetsView(viewsets.ModelViewSet):
         files = self.request.FILES.getlist('photos')
         if files:
             for old_photo in pet.photos.all(): old_photo.delete()
-            for f in files: Photo.objects.create(pet=pet,photo=f)
+            for f in files[0:4]: Photo.objects.create(pet=pet,photo=f)
 
     def offerPet(self, request, pk):
         offer = Offer.objects.create(
