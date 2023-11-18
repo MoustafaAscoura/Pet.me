@@ -14,6 +14,7 @@ class MessagesView(viewsets.ModelViewSet):
     search_fields=['content']
     pagination.PageNumberPagination.page_size = 50 
     permission_classes = [IsAuthenticated, UserPermission]
+    ordering = ['created_at']
 
     def get_queryset(self):
         curr_user = self.request.user
