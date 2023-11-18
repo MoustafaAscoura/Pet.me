@@ -10,6 +10,7 @@ class Pet(models.Model):
         ('Bird', 'Bird'),
         ('Turtle', 'Turtle'),
         ('Hamster', 'Hamster'),
+        ('Other', 'Other'),
     )
 
     GENDER_CHOICES = (
@@ -25,6 +26,7 @@ class Pet(models.Model):
     color = models.CharField(max_length=20, null=True)
     birthdate = models.DateField(default=datetime.date.today,null=True)
     owner = models.ForeignKey('accounts.User', on_delete=models.CASCADE, related_name='pets')
+    created_at = models.DateField(auto_now_add=True)
 
     def __str__(self):
         return self.name
@@ -55,6 +57,7 @@ class Pet(models.Model):
     
     class Meta:
         unique_together = ('owner', 'name','birthdate',)
+        ordering = ['-created_at']
 
 class Photo(models.Model):
     photo = models.ImageField(upload_to="pets/images/%Y/%m/%d/%H/%M/%S/", null=True, blank=True)

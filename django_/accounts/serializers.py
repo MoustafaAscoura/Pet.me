@@ -23,7 +23,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         # fields = '__all__' #['id', 'username','first_name', 'last_name', 'email', 'gender', 'password','phone','picture','birthdate','profile_url','created_at', 'pets']
-        exclude = ('last_login', 'is_staff', 'is_active', 'groups', 'user_permissions')
+        exclude = ('last_login', 'is_staff', 'groups', 'user_permissions')
         read_only_fields = ('id', 'created_at','email','username')
         depth = 1
         extra_kwargs = {

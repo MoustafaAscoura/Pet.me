@@ -16,15 +16,16 @@ from .permissons import UserPermission
 class PetsView(viewsets.ModelViewSet):
     throttle_classes = [AnonRateThrottle, UserRateThrottle]
     search_fields=['name', 'species']
-    ordering_fields=['birthdate']
+    ordering_fields=['birthdate', 'created_at']
+    ordering = ['-created_at']
+
 
     def get_queryset(self):
         allpets = Pet.objects.all()
         species = self.request.query_params.get('species')
         gender = self.request.query_params.get('gender')
-        if gender: allpets = allpets.filter(gender__icontains=gender)
-        if species: allpets = allpets.filter(species__icontains=species)
-
+        if gender: allpets = allpets.filter(gender=gender)
+        if species: allpets = allpets.filter(species=species)
         return allpets
 
         
