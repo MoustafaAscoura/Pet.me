@@ -32,8 +32,10 @@ class MessagesView(viewsets.ModelViewSet):
         people2 = curr_user.received_messages.values_list('sender__id','sender__picture','sender__username', 'sender__first_name',
                                          'sender__last_name')
         
+
         result_list = set(chain(people1, people2))
-        return JsonResponse(list(result_list), safe=False)
+        keys=["id","picture","username","first_name","last_name"]
+        return JsonResponse([dict(zip(keys,person)) for person in result_list], safe=False)
 
     serializer_class = MessageSerializer
 

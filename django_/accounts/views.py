@@ -7,6 +7,7 @@ from rest_framework.permissions import IsAdminUser
 from djoser.views import UserViewSet
 
 from .models import User
+from .permissons import UserPermission
 from .serializers import UserSerializer
 
 class UserListView(generics.ListAPIView):
@@ -15,14 +16,8 @@ class UserListView(generics.ListAPIView):
     serializer_class = UserSerializer
     search_fields=['username', 'first_name', 'last_name']
 
-class UserRetrieveView(generics.RetrieveAPIView):
+class UserSingleView(generics.RetrieveDestroyAPIView):
     throttle_classes = [AnonRateThrottle, UserRateThrottle]
     queryset = User.objects.all()
     serializer_class = UserSerializer
-
-
-class UserDeleteView(generics.DestroyAPIView):
-    throttle_classes = [AnonRateThrottle, UserRateThrottle]
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-    permission_classes = [IsAdminUser]
+    permission_classes = [UserPermission]
