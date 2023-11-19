@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     'social_django',
     'django_cleanup.apps.CleanupConfig',
+    'channels',
     'pets.apps.PetsConfig',
     'offers.apps.OffersConfig',
     'social.apps.SocialConfig',
@@ -71,6 +72,18 @@ REST_FRAMEWORK = {
         'user': '100/minute'
     }
 }
+
+# -----------
+
+ASGI_APPLICATION = "messages.routing.application" #routing.py will handle the ASGI
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': "channels.layers.InMemoryChannelLayer"
+        }
+    }
+# ------------------
+
+
 
 DOMAIN = "127.0.0.1:3000"
 SITE_NAME = "PetMe"
