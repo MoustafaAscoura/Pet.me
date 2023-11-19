@@ -52,8 +52,10 @@ class CommentSerializer(serializers.ModelSerializer):
         read_only_fields = ('id', 'created_at')
     
     def validate(self, attrs):
+        post_id = self.context['request'].parser_context['kwargs']['post_id']
+
         attrs['user'] = self.context['request'].user
-        
+        attrs['post'] = Post.objects.filter(id=post_id).first()
         return attrs
 
 class ReportsSerializer(serializers.ModelSerializer):

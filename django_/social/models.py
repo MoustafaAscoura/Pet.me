@@ -7,6 +7,9 @@ class Post(models.Model):
     user=models.ForeignKey(User, on_delete=models.CASCADE, related_name="posts")
     content = models.TextField()
 
+    class Meta:
+        ordering = ['-created_at']
+
 class Photo(models.Model):
     photo = models.ImageField(upload_to="posts/images/%Y/%m/%d/%H/%M/%S/")
     post = models.ForeignKey(Post,on_delete=models.CASCADE, related_name='photos')
@@ -18,7 +21,7 @@ class Comment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ['-created_at']
+        ordering = ['created_at']
 
 class Reply(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="replies")
@@ -27,7 +30,7 @@ class Reply(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ['-created_at']
+        ordering = ['created_at']
 
 class Report(models.Model):
     user=models.ForeignKey(User, on_delete=models.CASCADE, related_name="reports")
@@ -35,3 +38,7 @@ class Report(models.Model):
     comment = models.ForeignKey(Comment, on_delete=models.CASCADE, related_name="reports", null=True)
     reason = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'post','comment',)
+
