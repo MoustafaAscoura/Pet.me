@@ -15,7 +15,7 @@ from .permissons import OfferPermission, RequestPermission
 
 class OffersView(viewsets.ModelViewSet):
     throttle_classes = [AnonRateThrottle, UserRateThrottle]
-    search_fields=['pet__name', 'user__username', 'description']
+    search_fields=['pet__name', 'user__username', 'description','pet__species','pet__breed']
     permission_classes = [OfferPermission]
 
     def get_queryset(self):

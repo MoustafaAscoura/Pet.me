@@ -14,7 +14,7 @@ class UserListView(generics.ListAPIView):
     throttle_classes = [AnonRateThrottle, UserRateThrottle]
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    search_fields=['username', 'first_name', 'last_name']
+    search_fields=['username', 'first_name', 'last_name','email']
 
 class UserSingleView(generics.RetrieveDestroyAPIView):
     throttle_classes = [AnonRateThrottle, UserRateThrottle]
