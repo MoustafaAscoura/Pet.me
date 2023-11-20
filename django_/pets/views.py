@@ -25,7 +25,7 @@ class PetsView(viewsets.ModelViewSet):
         species = self.request.query_params.get('species')
         gender = self.request.query_params.get('gender')
         if gender: allpets = allpets.filter(gender=gender)
-        if species: allpets = allpets.filter(species=species)
+        if species: allpets = allpets.filter(species=species.capitalize())
         return allpets
 
         

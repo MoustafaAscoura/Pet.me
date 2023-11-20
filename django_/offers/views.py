@@ -24,7 +24,7 @@ class OffersView(viewsets.ModelViewSet):
         gender = self.request.query_params.get('gender')
 
         if gender: alloffers = alloffers.filter(pet__gender=gender)
-        if species: alloffers = alloffers.filter(pet__species=species)
+        if species: alloffers = alloffers.filter(pet__species=species.capitalize())
 
         return alloffers
     
