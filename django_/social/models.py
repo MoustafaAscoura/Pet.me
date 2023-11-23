@@ -21,7 +21,7 @@ class Comment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ['created_at']
+        ordering = ['-created_at']
 
 class Reply(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="replies")
@@ -30,7 +30,7 @@ class Reply(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ['created_at']
+        ordering = ['-created_at']
 
 class Report(models.Model):
     user=models.ForeignKey(User, on_delete=models.CASCADE, related_name="reports")

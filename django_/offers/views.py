@@ -8,7 +8,7 @@ from rest_framework import viewsets
 from .models import Offer,AdoptRequest
 from pets.models import Adoption
 from chats.models import Message
-from social.models import Post
+from social.models import Post, Photo
 from .serializers import OfferSerializer,AdoptRequestsSerializer
 from rest_framework.throttling import UserRateThrottle, AnonRateThrottle
 from .permissons import OfferPermission, RequestPermission
@@ -59,6 +59,7 @@ class AdoptRequestsView(viewsets.ModelViewSet):
         adopt_offer = adopt_request.offer
         pet = adopt_offer.pet
         old_owner = pet.owner
+        
         #end ownership of old owner and create new adoption for new owner
         adoption = pet.adoptions.last()
         adoption.end_at = timezone.now().date()
@@ -71,6 +72,7 @@ class AdoptRequestsView(viewsets.ModelViewSet):
         new_adoption.save()
         adopt_offer.delete()
 
-        post = Post.objects.create(user=pet.owner, content=f"Hi, I just adopted this pet, {pet.name} from {old_owner}!")
+        post = Post.objects.create(user=pet.owner, content=f"Hi, I just adopted this pet, {pet.name} from {old_owner}!", )
+        photo = Photo.objects.create(photo=pet.photos.first(), post=post)
 
         return Response('Accepted Adopt Request', status=status.HTTP_204_NO_CONTENT)
