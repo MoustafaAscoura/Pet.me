@@ -14,7 +14,6 @@ class MessagesView(viewsets.ModelViewSet):
     search_fields=['content']
     pagination.PageNumberPagination.page_size = 50 
     permission_classes = [IsAuthenticated, UserPermission]
-    ordering = ['created_at']
 
     def get_queryset(self):
         curr_user = self.request.user
@@ -25,6 +24,8 @@ class MessagesView(viewsets.ModelViewSet):
             criteria2 = Q(sender=other_user) & Q(receiver=curr_user)
 
             return Message.objects.filter(Q(criteria1) | Q(criteria2))
+        return Message.objects.all()
+
 
     def relatedUsers(self, request):
         curr_user = self.request.user

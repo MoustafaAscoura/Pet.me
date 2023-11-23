@@ -72,7 +72,8 @@ class AdoptRequestsView(viewsets.ModelViewSet):
         new_adoption.save()
         adopt_offer.delete()
 
-        post = Post.objects.create(user=pet.owner, content=f"Hi, I just adopted this pet, {pet.name} from {old_owner}!", )
-        photo = Photo.objects.create(photo=pet.photos.first(), post=post)
+        post = Post.objects.create(user=pet.owner, content=f"Say hello to my new pet, {pet.name}! I just adopted him from {old_owner}!", )
+        photo = Photo.objects.create(photo=pet.photos.first().photo, post=post)
 
         return Response('Accepted Adopt Request', status=status.HTTP_204_NO_CONTENT)
+        

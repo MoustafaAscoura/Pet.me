@@ -11,4 +11,4 @@ class Message(models.Model):
         return self.content
     
     class Meta:
-        ordering = ['-created_at']
+        ordering = ['created_at']
