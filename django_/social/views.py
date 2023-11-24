@@ -11,11 +11,18 @@ class PostsView(viewsets.ModelViewSet):
 
     search_fields=['user__username', 'content']
     permission_classes = [PostsPermission]
-    queryset = Post.objects.all()
     serializer_class = PostsSerializer
 
+    def get_queryset(self):
+        if self.kwargs.get('user_id'):
+            return Post.objects.filter(user__id = self.kwargs.get('user_id'))
+        elif self.action == "list":
+            return Post.objects.filter(visible=True)
+        else:
+            return Post.objects.all()
+    
     def perform_create(self, serializer):
-        post = serializer.save(user=self.request.user)
+        post = serializer.save(user=self.request.user, visible=True)
 
         files = self.request.FILES.getlist('photos')
         if files:
@@ -27,6 +34,13 @@ class PostsView(viewsets.ModelViewSet):
         if files:
             for old_photo in post.photos.all(): old_photo.delete()
             for f in files[0:4]: Photo.objects.create(post=post,photo=f)
+
+    def hide(self,request, pk):
+        instance = self.get_object()
+        instance.visible = False
+        instance.save()
+        return Response("Post hidden successfully", status=status.HTTP_200_OK)
+
 
 class ReportsView(viewsets.ModelViewSet):
     permission_classes = [reportsPermission]

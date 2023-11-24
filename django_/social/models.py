@@ -5,6 +5,7 @@ class Post(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
     user=models.ForeignKey(User, on_delete=models.CASCADE, related_name="posts")
+    visible = models.BooleanField(default=True)
     content = models.TextField()
 
     class Meta:

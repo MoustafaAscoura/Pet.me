@@ -57,7 +57,7 @@ class PetsView(viewsets.ModelViewSet):
         offer = Offer.objects.create(
             user=request.user, pet=get_object_or_404(Pet,pk=self.kwargs['pk']), 
                                                     description=request.data.get('description'))
-        post = Post.objects.create(user=request.user, content=f"Hi, I am offering my pet, {offer.pet.name}, for adoption!")
+        post = Post.objects.create(user=request.user, visible=True, content=f"Hi, I am offering my pet, {offer.pet.name}, for adoption!")
         return Response('Pet is offered for adoption', status=status.HTTP_201_CREATED)
 
 

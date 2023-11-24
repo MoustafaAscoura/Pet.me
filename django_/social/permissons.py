@@ -8,7 +8,9 @@ class PostsPermission(permissions.BasePermission):
         if view.action in ['partial_update', 'update']:
             obj.user == request.user
         elif view.action == 'destroy':
-            return request.user.is_authenticated and (obj.user == request.user or request.user.is_superuser)
+            return (obj.user == request.user or request.user.is_superuser)
+        elif view.action == 'hide':
+            return request.user.is_superuser
         else:
             return True
 

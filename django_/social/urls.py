@@ -3,8 +3,9 @@ from .views import *
 
 urlpatterns = [
     path('', PostsView.as_view({'get': 'list', 'post':'create'}) ,name='posts'),
+    path('user/<int:user_id>/', PostsView.as_view({'get': 'list'}) ,name='user.posts'),
     path('<int:pk>/', 
-         PostsView.as_view({'get': 'retrieve', 'patch':'partial_update','delete':'destroy'}) ,name='posts.details'),
+         PostsView.as_view({'get': 'retrieve', 'patch':'partial_update','delete':'destroy','post':'hide'}) ,name='posts.details'),
 
     path('reports/', ReportsView.as_view({'get': 'list'}), name='reports'),
     path('reports/<int:pk>/', ReportsView.as_view({'delete':'destroy'}), name='reports.details'),
