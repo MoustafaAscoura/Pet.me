@@ -1,6 +1,7 @@
 from django.db.models import Q
 from rest_framework import viewsets, pagination
 from django.http import JsonResponse
+from django.utils import timezone
 from itertools import chain
 
 from accounts.models import User
@@ -22,13 +23,17 @@ class MessagesView(viewsets.ModelViewSet):
             other_user = self.kwargs['user_id']
             criteria1 = Q(sender=curr_user) & Q(receiver=other_user)
             criteria2 = Q(sender=other_user) & Q(receiver=curr_user)
-
+            latest = Message.objects.filter(criteria2)
+            if latest.exists():
+                latest = latest.last()
+                latest.seen = True
+                latest.save()
             return Message.objects.filter(Q(criteria1) | Q(criteria2))
         return Message.objects.all()
 
 
     def relatedUsers(self, request):
-        curr_user = self.request.user
+        curr_user = request.user
         people1 = curr_user.sent_messages.values_list('receiver__id','receiver__picture',
                                          'receiver__username', 'receiver__first_name', 'receiver__last_name')
         people2 = curr_user.received_messages.values_list('sender__id','sender__picture','sender__username', 'sender__first_name',
@@ -38,6 +43,11 @@ class MessagesView(viewsets.ModelViewSet):
         result_list = set(chain(people1, people2))
         keys=["id","picture","username","first_name","last_name"]
         return JsonResponse([dict(zip(keys,person)) for person in result_list], safe=False)
+
+    def check(self, request):
+        curr_user = request.user
+        latestMessage = curr_user.received_messages.last()
+        return JsonResponse({'new':not latestMessage.seen})
 
     serializer_class = MessageSerializer
 
