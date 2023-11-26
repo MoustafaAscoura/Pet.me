@@ -72,17 +72,21 @@ REST_FRAMEWORK = {
     }
 }
 
-DOMAIN = "127.0.0.1:3000"
+DOMAIN = "pet-me-kappa.vercel.app"
 SITE_NAME = "PetMe"
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
+    "https://pet-me-kappa.vercel.app",
+    "http://pet-me-kappa.vercel.app",
 ]
 
 CORS_ORIGIN_WHITELIST = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
+    "https://pet-me-kappa.vercel.app",
+    "http://pet-me-kappa.vercel.app",
 ]
 
 ROOT_URLCONF = 'djoserauthapi.urls'
@@ -110,9 +114,9 @@ DJOSER = {
     'PASSWORD_RESET_SHOW_EMAIL_NOT_FOUND': True,
     'TOKEN_MODEL':None,    
     "SOCIAL_AUTH_ALLOWED_REDIRECT_URIS": [
-        'http://localhost:3000/register/social/complete/github/',
-        'http://localhost:3000/register/social/complete/facebook/',
-        'http://localhost:3000/register/social/complete/google-oauth2/',
+        'https://pet-me-kappa.vercel.app/register/social/complete/github/',
+        'https://pet-me-kappa.vercel.app/register/social/complete/facebook/',
+        'https://pet-me-kappa.vercel.app/register/social/complete/google-oauth2/',
     ],
 
     "SERIALIZERS": {
