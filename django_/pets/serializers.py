@@ -39,6 +39,9 @@ class PetSerializer(serializers.ModelSerializer):
             "user_id": obj.owner.id,
             "user_picture": data['owner']['picture'],   
         }
+        
+        data['offer'] = obj.offers.first().id if obj.offers.first() else 0
+
         if data['photos']:
             data['thumbnail'] = data['photos'][0]['photo']
 

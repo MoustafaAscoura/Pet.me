@@ -67,8 +67,8 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'pets.pagination.CustomPagination',
     'PAGE_SIZE': 12,
     'DEFAULT_THROTTLE_RATES': {
-        'anon': '50/minute',
-        'user': '100/minute'
+        'anon': '20/minute',
+        'user': '50/minute'
     }
 }
 

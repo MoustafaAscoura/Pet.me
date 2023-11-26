@@ -4,7 +4,7 @@ from .models import Pet, Adoption, Photo
 from offers.models import Offer
 from social.models import Post
 from .serializers import PetSerializer, AdoptionSerializer
-from rest_framework.response import Response
+from django.http import JsonResponse
 from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.throttling import UserRateThrottle, AnonRateThrottle
@@ -58,6 +58,6 @@ class PetsView(viewsets.ModelViewSet):
             user=request.user, pet=get_object_or_404(Pet,pk=self.kwargs['pk']), 
                                                     description=request.data.get('description'))
         post = Post.objects.create(user=request.user, visible=True, content=f"Hi, I am offering my pet, {offer.pet.name}, for adoption!")
-        return Response('Pet is offered for adoption', status=status.HTTP_201_CREATED)
+        return JsonResponse({'offer':offer.id}, status=status.HTTP_201_CREATED)
 
 
