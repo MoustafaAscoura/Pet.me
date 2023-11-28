@@ -29,4 +29,5 @@ urlpatterns = [
     path('offers/', include('offers.urls') ),
     path('posts/', include('social.urls') ),
     path('chats/', include('chats.urls') ),
-]  + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
+]  + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+

@@ -161,17 +161,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'django_.wsgi.application'
 
-# DATABASES = {
-#     "default": {
-#     "ENGINE": "django.db.backends.postgresql",
-#     "NAME": "pet_me",
-#     "USER": "mariam",
-#     "PASSWORD": "123456789@m",
-#     "HOST": "localhost",
-#     "PORT": "5432",
-#     }
-# }
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -179,6 +168,15 @@ DATABASES = {
     }
 }
 
+# DATABASES = DATABASES = {
+#     'default' : {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME':'petme$Pet_Me',
+#         'USER': 'petme',
+#         'HOST':'petme.mysql.pythonanywhere-services.com',
+#         'PASSWORD':'Abc_12345'
+#     }
+# }
 
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',},
