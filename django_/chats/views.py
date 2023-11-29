@@ -1,6 +1,8 @@
 from itertools import chain
 from django.db.models import Q
 from django.http import JsonResponse
+from django.conf import settings
+
 from rest_framework import viewsets, pagination
 from rest_framework.permissions import IsAuthenticated
 
@@ -42,7 +44,7 @@ class MessagesView(viewsets.ModelViewSet):
 
         for x in result_list_:
             x = list(x)
-            x[1] = request.build_absolute_uri(x[1])
+            x[1] = request.META['HTTP_HOST'] + settings.MEDIA_URL + x[1]
             result_list.append(x)
 
         keys=["id","picture","username","first_name","last_name"]

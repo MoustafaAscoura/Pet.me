@@ -11,7 +11,7 @@ SECRET_KEY = 'django-insecure-*38y&7z!pu-1+&gm7-2qbx29s5nvoeh)l-fm1i%xu_5=r!=+_)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['petme.pythonanywhere.com']
+ALLOWED_HOSTS = ['petme.pythonanywhere.com','localhost', '127.0.0.1',]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
