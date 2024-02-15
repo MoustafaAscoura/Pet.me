@@ -6,12 +6,12 @@ from datetime import timedelta
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-*38y&7z!pu-1+&gm7-2qbx29s5nvoeh)l-fm1i%xu_5=r!=+_)'
+SECRET_KEY=os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG')
 
-ALLOWED_HOSTS = ['petme.pythonanywhere.com','localhost', '127.0.0.1',]
+ALLOWED_HOSTS = ['petme.pythonanywhere.com', 'localhost', '127.0.0.1',]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'djoser',
     'drf_yasg',
+    'drf_spectacular',
     "corsheaders",
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
@@ -69,7 +70,12 @@ REST_FRAMEWORK = {
     'DEFAULT_THROTTLE_RATES': {
         'anon': '20/minute',
         'user': '50/minute'
-    }
+    },
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+SPECTACULAR_SETTINGS = {
+    'Title', 'Petme Endpoints Documentation'
 }
 
 DOMAIN = "pet-me-kappa.vercel.app"
@@ -128,7 +134,6 @@ DJOSER = {
 
 AUTH_USER_MODEL = 'accounts.User'
 
-
 # Email Configuration
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
@@ -136,7 +141,6 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = "petme.api@gmail.com"
 EMAIL_HOST_PASSWORD = "yyiycndhqjwhlmpq"
-
 
 ROOT_URLCONF = 'django_.urls'
 
@@ -162,21 +166,14 @@ TEMPLATES = [
 WSGI_APPLICATION = 'django_.wsgi.application'
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    'default' : {
+        'ENGINE': os.getenv('DB_ENGINE'),
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'HOST': os.getenv('DB_HOST'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
     }
 }
-
-# DATABASES = DATABASES = {
-#     'default' : {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME':'petme$Pet_Me',
-#         'USER': 'petme',
-#         'HOST':'petme.mysql.pythonanywhere-services.com',
-#         'PASSWORD':'Abc_12345'
-#     }
-# }
 
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',},
@@ -185,12 +182,10 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',},
 ]
 
-
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = 'static/'
@@ -208,14 +203,14 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
-SOCIAL_AUTH_GITHUB_KEY = '923e62395399fae6dd91'
-SOCIAL_AUTH_GITHUB_SECRET = 'a9decba498cee01e861f989733b1d252857a95c0'
+SOCIAL_AUTH_GITHUB_KEY = os.getenv('SOCIAL_AUTH_GITHUB_KEY')
+SOCIAL_AUTH_GITHUB_SECRET = os.getenv('SOCIAL_AUTH_GITHUB_SECRET')
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '824848817431-3395fioo7nn8pvq96fbpdgqcgj28ajmt.apps.googleusercontent.com'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.getenv('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY')
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.getenv('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET')
 
-SOCIAL_AUTH_FACEBOOK_KEY = "153943981107306"
-SOCIAL_AUTH_FACEBOOK_SECRET = "4b7b1ee8dd76f30370333a23fee61bfb"
+SOCIAL_AUTH_FACEBOOK_KEY = os.getenv('SOCIAL_AUTH_FACEBOOK_KEY')
+SOCIAL_AUTH_FACEBOOK_SECRET = os.getenv('SOCIAL_AUTH_FACEBOOK_SECRET')
 SOCIAL_AUTH_FACEBOOK_API_VERSION = '18.0'
 
 CORS_ALLOW_CREDENTIALS = True
