@@ -12,7 +12,7 @@ from .models import *
 from .permissons import UserPermission
 
 class MessagesView(viewsets.ModelViewSet):
-    search_fields=['content']
+    search_fields = ['content']
     pagination.PageNumberPagination.page_size = 50 
     permission_classes = [IsAuthenticated, UserPermission]
     serializer_class = MessageSerializer
@@ -47,13 +47,13 @@ class MessagesView(viewsets.ModelViewSet):
             x[1] = request.META['HTTP_HOST'] + settings.MEDIA_URL + x[1]
             result_list.append(x)
 
-        keys=["id","picture","username","first_name","last_name"]
-        return JsonResponse([dict(zip(keys,person)) for person in result_list], safe=False)
+        keys = ["id", "picture", "username", "first_name", "last_name"]
+        return JsonResponse([dict(zip(keys, person)) for person in result_list], safe=False)
 
     def check(self, request):
         curr_user = request.user
         latestMessage = curr_user.received_messages.last()
-        return JsonResponse({'new':not latestMessage.seen if latestMessage else False})
+        return JsonResponse({'new': not latestMessage.seen if latestMessage else False})
 
     def perform_create(self, serializer):
         receiver = User.objects.filter(id=self.kwargs['user_id']).first()

@@ -2,7 +2,7 @@ from rest_framework import permissions
 
 class PostsPermission(permissions.BasePermission):
     def has_permission(self, request, view):
-        return view.action in ['list','retrieve'] or request.user.is_authenticated
+        return view.action in ['list', 'retrieve'] or request.user.is_authenticated
 
     def has_object_permission(self, request, view, obj):
         if view.action in ['partial_update', 'update']:
@@ -20,7 +20,7 @@ class reportsPermission(permissions.BasePermission):
 
 class CommentsPermission(permissions.BasePermission):
     def has_permission(self, request, view):
-        return view.action in ['list','retrieve'] or request.user.is_authenticated
+        return view.action in ['list', 'retrieve'] or request.user.is_authenticated
 
     def has_object_permission(self, request, view, obj):
         return request.user.is_authenticated and (obj.user == request.user or request.user.is_superuser)
